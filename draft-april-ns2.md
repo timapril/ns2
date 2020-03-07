@@ -37,10 +37,10 @@ The NS2 and NS2T records uses the SVCB record format defined in {{?I-D.draft-iet
 
 To introduce the NS2 and NS2T records, this example shows a possible response from an authoritative in the authority section of the DNS response when delegating to another nameserver.
 
-    example.com.  86400  IN NS2    2 ns2.example.com. ( transports=dot, 
+    example.com.  86400  IN NS2    2 ns2.example.com. ( transports=dot,
                     dnsTlsFingerprints=["MIIS987SSLKJ...123===",
                         "MII3SODKSLKJ...456==="] )
-    example.com.  86400  IN NS2    3 ns3.example.com. ( transports=doh, 
+    example.com.  86400  IN NS2    3 ns3.example.com. ( transports=doh,
                     dnsDohURITemplate="https://ns.example.net/q/{?dns}" )
     example.com.  86400  IN NS     ns1.example.com.
     ns1.example.com.    86400   IN  NS  192.0.2.1
@@ -57,12 +57,12 @@ Like in SVCB, NS2 and NS2T also offer the ability to use the Alias form delegati
 
 The example.net authoritative server may return the following NS2T records in response to a query as deirected by the above records.
 
-    ns2.example.net 3600    IN NS2T ns1.example.org. ( transports=dot, 
+    ns2.example.net 3600    IN NS2T ns1.example.org. ( transports=dot,
                     dnsTlsFingerprints=["MIIS987SSLKJ...123==="] )
-    ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=doh, 
+    ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=doh,
                     ddnsDohURITemplate="https://ns.example.net/q/{?dns}")
 
-The avbove records indicate to the client that the authoritative nameservers for zones that Alias to ns2.example.net are ns1.example.org and ns2.example.rg with the configuration provided. 
+The avbove records indicate to the client that the authoritative nameservers for zones that Alias to ns2.example.net are ns1.example.org and ns2.example.rg with the configuration provided.
 
 Later sections of this document will go into more detail on the resolution process using these records.
 
@@ -87,7 +87,7 @@ The SVCB record allows for two types of records, the AliasForm and the ServiceFo
 ## Difference between the records
 
 This document introduces two different resource record types. Both records have the same functionality, with the difference between them being that the NS2 record MUST only be used at a delegation point while the NS2T, is NS2 Target, record does not indicate that the label is being delegated. For example, take the following NS2 record:
-    
+
     example.com.  86400  IN NS2 1   ns2.example.net. ( transports=dot )
 
 When a client receives the above record, the resolver should send queries for any name under example.com to the nameserver at ns2.example.com unless further delegated. By contrast, when presented with the records below:
@@ -126,7 +126,7 @@ Some zone owners may wish to use multiple providers to serve their zone, in whic
 DRAFT NOTE: SVCB says that there "SHOULD only have a single RR". This ignores that but keep the randomization part. Section 2.5p1 of SVCB
 
 ### Loop Prevention
- 
+
 Special care should be taken by both the zone owner and the delegated zone operator to ensure that a lookup loop is not created by having two AliasForm records rely on each other to serve the zone. Doing so may result in a resolution loop, and likely a denial of service. Any clients implementing NS2 and NS2T SHOULD implement a per-resolution limit of how many AliasForm records may be traversed when looking up a delegation to prevent infinite looping. When a loop is detected, like with the handling of CNAME or NS, the server should respond to the client with SERVFAIL.
 
 ## ServiceForm
@@ -155,7 +155,7 @@ See {{?I-D.draft-ietf-dnsop-svcb-httpssvc-00}} for the usage, wire and display f
 
 #### "transports"
 
-The "transports" SvcParamKey defines the list of transports offered by the nameserver named in the SvcDomainName. 
+The "transports" SvcParamKey defines the list of transports offered by the nameserver named in the SvcDomainName.
 
 The existing "alpn" SvcParamKey was not reused for NS2 and NS2T due to the restriction that the "alpn" SvcParamValues are limited to those defined in the TLS Application-Layer Protocol Negotiation (ALPN) Protocol IDs registry. Plaintext DNS traffic is not, and should not be listed in that registry, but is required to support the transition to encrypted transport in NS2 and NS2T records.
 
@@ -180,7 +180,7 @@ DRAFT NOTE: Should this be "ns2flags" and just have a 16 bit field for boolean v
 
 #### "dnsDohURITemplate"
 
-The "dnsDohURITemplate" SvcParamKey defines the URI template to be used for issuing DNS-over-HTTPS queries to the nameserver defined in the record. The host portion of the "dnsDohURITemplate" value SHOULD match the SvcDomainName field. 
+The "dnsDohURITemplate" SvcParamKey defines the URI template to be used for issuing DNS-over-HTTPS queries to the nameserver defined in the record. The host portion of the "dnsDohURITemplate" value SHOULD match the SvcDomainName field.
 
 In the event that the host portion of the "dnsDohURITemplate" SvcParamValues and SvcDomainName field do not match, the SvcDomainName value SHOULD be used for resolving the host and provide host portion of the "dnsDohURITemplate" template SvcParamValue for the TLS ServerNameIndication header and the HTTP Host header. For example, in the below NS2 delegation, the client SHOULD resolve the name ns.example.net and provide the host header and TLS ServerNameIndication header of doh.example.org:
 
@@ -230,30 +230,30 @@ If a zone operator removes all NS records before NS2 and NS2T records are implem
 
 ### Multiple ServiceForm records for the same host or IP address
 
-As described in the "transport" SvcParamKey section above, a host or IP address may support multiple different transport methods. This can be represented in two ways. The first is to list all supported transports in the order of diminishing desire in the same record. The second is to use multiple NS2 or NS2T records. 
+As described in the "transport" SvcParamKey section above, a host or IP address may support multiple different transport methods. This can be represented in two ways. The first is to list all supported transports in the order of diminishing desire in the same record. The second is to use multiple NS2 or NS2T records.
 
 When those records have different SvcFieldPriority values, as in {{?I-D.draft-ietf-dnsop-svcb-httpssvc-00}}, lower-numbered priorities express a higher preference for that record.
 
 In the case where there are identical records other than the "ds" or "dnskey" fields, the records can be combined. In the below example, there are two records that have the same SvcDomainName, SvcFieldPriority, and SvcParamValues (other than "ds"). As a result, the NS2 records here:
 
-    example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot, 
+    example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
                     dnsTlsFingerprints="MIIS987SSLKJ...123===" )
-    example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot, 
+    example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
                     dnsTlsFingerprints="MII3SODKSLKJ...456===" )
-    example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh, 
+    example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
                     dnsDohURITemplate="https://dns.example.org/q/{?dns}" )
 
 are the same as:
 
-    example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot, 
+    example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
                     dnsTlsFingerprints=["MIIS987SSLKJ...123===",
                         "MII3SODKSLKJ...456==="] )
-    example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh, 
+    example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
                     dnsDohURITemplate="https://dns.example.org/q/{?dns}" )
 
 # Responses with NS2
 
-NS2 and NS2T are intended to supersede the NS record. When an authoritative nameserver receives a query for a name that it intendes to refer to another server, the nameserver SHOULD be provided NS2 records in addition to NS records in the delegation. 
+NS2 and NS2T are intended to supersede the NS record. When an authoritative nameserver receives a query for a name that it intendes to refer to another server, the nameserver SHOULD be provided NS2 records in addition to NS records in the delegation.
 
 ## Response Size Considerations
 
@@ -283,6 +283,12 @@ TODO: Fill this section out
 ## Parsing
 
 ## Availability
+
+## Connetion Failures
+
+When a resolver attempts to access nameserver delegated by a NS2 or NST2 record, if a connection error occurs, such as a certificate mismatch or unreachable server, the resolver SHOULD attempt to connect to the other nameservers delegated to until either exhausting the list or the resolver's policy indicates that they should treat the resoltion as failed.
+
+The failure action when failing to resolve a name with NS2/NS2T due to connection erros is dependant on the resolver operators policies. For resolvers which strongly favor privacy, the operators may wish to return a SERVFAIL when the NS2/NS2T resoltion process completes without successfully contacting a delegated nameserver(s) while opportunisitic privacy resolvers may wish to attempt resolution using any NS records that may be present.
 
 # IANA Considerations
 
