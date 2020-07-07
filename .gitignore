@@ -9,9 +9,11 @@
 .tags
 .targets.mk
 /*-[0-9][0-9].xml
+draft-april-ns2.xml
 issues.json
+lib
 pulls.json
 report.xml
 venv/
 lib
-draft-april-ns2.xml
+draft-tapril-ns2.xml

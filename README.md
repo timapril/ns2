@@ -2,9 +2,9 @@
 
 This is the working area for the individual Internet-Draft, "Parameterized Nameserver Delegation with NS2 and NS2T".
 
-* [Editor's Copy](https://timapril.github.io/ns2/#go.draft-april-ns2.html)
-* [Individual Draft](https://tools.ietf.org/html/draft-april-ns2)
-* [Compare Editor's Copy to Individual Draft](https://timapril.github.io/ns2/#go.draft-april-ns2.diff)
+* [Editor's Copy](https://timapril.github.io/ns2/#go.draft-tapril-ns2.html)
+* [Individual Draft](https://tools.ietf.org/html/draft-tapril-ns2)
+* [Compare Editor's Copy to Individual Draft](https://timapril.github.io/ns2/#go.draft-tapril-ns2.diff)
 
 ## Building the Draft
 
