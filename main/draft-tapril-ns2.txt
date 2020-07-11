@@ -86,8 +86,8 @@ Table of Contents
        2.4.1.  AliasForm and ServiceForm in the Parent . . . . . . .  11
        2.4.2.  Rollout . . . . . . . . . . . . . . . . . . . . . . .  11
        2.4.3.  Availability  . . . . . . . . . . . . . . . . . . . .  11
-       2.4.4.  Multiple ServiceForm records for the same host or IP
-               address . . . . . . . . . . . . . . . . . . . . . . .  12
+       2.4.4.  Multiple ServiceForm records for the same host or
+               IP address  . . . . . . . . . . . . . . . . . . . . .  12
    3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  12
      3.1.  Response Size Considerations  . . . . . . . . . . . . . .  13
      3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  13
@@ -248,8 +248,8 @@ Internet-Draft                     NS2                         July 2020
    ns2.example.com unless further delegated.  By contrast, when
    presented with the records below:
 
-example.com.  86400  IN NS2 0   customer.example.org.
-customer.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
+   example.com.  86400  IN NS2 0   customer.example.org.
+   customer.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
 
    A resolver trying to resolve a name under example.com would get the
    first record above from the parent authoritative server, .COM,
@@ -267,13 +267,13 @@ customer.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
    It should be noted that both NS2 and NS2T records may exist for the
    same label.  Below is an example of this:
 
- example.com.  86400  IN NS2 0   c1.example.org.
- c1.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
- c1.example.org.  86400  IN NS2  1   ns3.example.net. ( transports=dot )
- test.c1.example.org. 600 IN A 192.0.2.1
+   example.com.  86400  IN NS2 0   c1.example.org.
+   c1.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
+   c1.example.org.  86400  IN NS2  1   ns3.example.net. ( transports=dot )
+   test.c1.example.org. 600 IN A 192.0.2.1
 
-
-
+   In the above case, the NS2 record for c1.example.org would only be
+   used when trying to resolve names below c1.example.org.  This reason
 
 
 
@@ -282,8 +282,6 @@ April                    Expires 12 January 2021                [Page 5]
 Internet-Draft                     NS2                         July 2020
 
 
-   In the above case, the NS2 record for c1.example.org would only be
-   used when trying to resolve names below c1.example.org.  This reason
    is why when an AliasForm NS2 or NS2T record is encountered, the
    resolver MUST query for the NS2T record associated with the given
    name.
@@ -325,6 +323,8 @@ Internet-Draft                     NS2                         July 2020
    DRAFT NOTE: SVCB says that there "SHOULD only have a single RR".
    This ignores that but keep the randomization part.  Section 2.5p1 of
    SVCB
+
+
 
 
 
@@ -636,20 +636,20 @@ Internet-Draft                     NS2                         July 2020
    SvcFieldPriority, and SvcParamValues (other than "ds").  As a result,
    the NS2 records here:
 
-  example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
-                  dnsTlsFingerprints="MIIS987SSLKJ...123===" )
-  example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
-                  dnsTlsFingerprints="MII3SODKSLKJ...456===" )
-  example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
-                  dnsDohURITemplate="https://dns.example.org/q/{?dns}" )
+   example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
+                   dnsTlsFingerprints="MIIS987SSLKJ...123===" )
+   example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
+                   dnsTlsFingerprints="MII3SODKSLKJ...456===" )
+   example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
+                   dnsDohURITemplate="https://dns.example.org/q/{?dns}" )
 
    are the same as:
 
-  example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
-                  dnsTlsFingerprints=["MIIS987SSLKJ...123===",
-                      "MII3SODKSLKJ...456==="] )
-  example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
-                  dnsDohURITemplate="https://dns.example.org/q/{?dns}" )
+   example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
+                   dnsTlsFingerprints=["MIIS987SSLKJ...123===",
+                       "MII3SODKSLKJ...456==="] )
+   example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
+                   dnsDohURITemplate="https://dns.example.org/q/{?dns}" )
 
 3.  Responses with NS2
 
@@ -786,34 +786,33 @@ April                    Expires 12 January 2021               [Page 14]
 Internet-Draft                     NS2                         July 2020
 
 
-   +============+========+============+====================================+=========+
-   |TransportKey| Name   | Meaning    | Protocol Specification             |Reference|
-   +============+========+============+====================================+=========+
-   | 0          | key0   | Reserved   | Reserved                           | (This   |
-   |            |        |            |                                    |Document)|
-   +------------+--------+------------+------------------------------------+---------+
-   | 1          | do53   |Unencrypted,| RFC1035                            | (This   |
-   |            |        | Plaintext  |                                    |Document)|
-   |            |        |DNS over UDP|                                    |         |
-   |            |        | or TCP     |                                    |         |
-   +------------+--------+------------+------------------------------------+---------+
-   | 2          | dot    |DNS-over-TLS| RFC7858                            | (This   |
-   |            |        |            |                                    |Document)|
-   +------------+--------+------------+------------------------------------+---------+
-   | 3          | doh    | DNS-over-  | RFC8484                            | (This   |
-   |            |        | HTTPS      |                                    |Document)|
-   +------------+--------+------------+------------------------------------+---------+
-   | 4          | doq    | DNS over   |[I-D.draft-huitema-quic-dnsoquic-07]|         |
-   |            |        | Dedicated  |                                    |         |
-   |            |        | QUIC       |                                    |         |
-   |            |        |Connections |                                    |         |
-   +------------+--------+------------+------------------------------------+---------+
-   |65280-65534 |keyNNNNN|Private Use | Private Use                        | (This   |
-   |            |        |            |                                    |Document)|
-   +------------+--------+------------+------------------------------------+---------+
-   | 65535      |key65535| Reserved   | Reserved                           | (This   |
-   |            |        |            |                                    |Document)|
-   +------------+--------+------------+------------------------------------+---------+
+   +------------+--------+--------------+------------------------------------+---------+
+   |TransportKey|Name    |Meaning       |Protocol Specification              |Reference|
+   +============+========+==============+====================================+=========+
+   |0           |key0    |Reserved      |Reserved                            |(This    |
+   |            |        |              |                                    |Document)|
+   +------------+--------+--------------+------------------------------------+---------+
+   |1           |do53    |Unencrypted,  |RFC1035                             |(This    |
+   |            |        |Plaintext DNS |                                    |Document)|
+   |            |        |over UDP or   |                                    |         |
+   |            |        |TCP           |                                    |         |
+   +------------+--------+--------------+------------------------------------+---------+
+   |2           |dot     |DNS-over-TLS  |RFC7858                             |(This    |
+   |            |        |              |                                    |Document)|
+   +------------+--------+--------------+------------------------------------+---------+
+   |3           |doh     |DNS-over-HTTPS|RFC8484                             |(This    |
+   |            |        |              |                                    |Document)|
+   +------------+--------+--------------+------------------------------------+---------+
+   |4           |doq     |DNS over      |[I-D.draft-huitema-quic-dnsoquic-07]|         |
+   |            |        |Dedicated QUIC|                                    |         |
+   |            |        |Connections   |                                    |         |
+   +------------+--------+--------------+------------------------------------+---------+
+   |65280-65534 |keyNNNNN|Private Use   |Private Use                         |(This    |
+   |            |        |              |                                    |Document)|
+   +------------+--------+--------------+------------------------------------+---------+
+   |65535       |key65535|Reserved      |Reserved                            |(This    |
+   |            |        |              |                                    |Document)|
+   +------------+--------+--------------+------------------------------------+---------+
 
                                   Table 1
 
@@ -837,12 +836,13 @@ Internet-Draft                     NS2                         July 2020
 
 
 
+
 April                    Expires 12 January 2021               [Page 15]
 
 Internet-Draft                     NS2                         July 2020
 
 
-     +=============+====================+=========+=================+
+     +-------------+--------------------+---------+-----------------+
      | SvcParamKey | NAME               | Meaning | Reference       |
      +=============+====================+=========+=================+
      | TBD1        | transports         |         | (This Document) |
@@ -863,31 +863,31 @@ Internet-Draft                     NS2                         July 2020
 7.  Informative References
 
    [I-D.draft-ghedini-dprive-early-data-01]
-              Ghedini, A., "Using Early Data in DNS over TLS", Work in
-              Progress, Internet-Draft, draft-ghedini-dprive-early-data-
-              01, 6 July 2019, <http://www.ietf.org/internet-drafts/
-              draft-ghedini-dprive-early-data-01.txt>.
+              Ghedini, A., "Using Early Data in DNS over TLS", draft-
+              ghedini-dprive-early-data-01 (work in progress), 6 July
+              2019,
+              <http://www.ietf.org/internet-drafts/draft-ghedini-dprive-
+              early-data-01.txt>.
 
    [I-D.draft-huitema-quic-dnsoquic-07]
               Huitema, C., Shore, M., Mankin, A., Dickinson, S., and J.
               Iyengar, "Specification of DNS over Dedicated QUIC
-              Connections", Work in Progress, Internet-Draft, draft-
-              huitema-quic-dnsoquic-07, 7 September 2019,
+              Connections", draft-huitema-quic-dnsoquic-07 (work in
+              progress), 7 September 2019,
               <http://www.ietf.org/internet-drafts/draft-huitema-quic-
               dnsoquic-07.txt>.
 
    [I-D.draft-ietf-dnsop-svcb-httpssvc-00]
               Schwartz, B., Bishop, M., and E. Nygren, "Service binding
               and parameter specification via the DNS (DNS SVCB and
-              HTTPSSVC)", Work in Progress, Internet-Draft, draft-ietf-
-              dnsop-svcb-httpssvc-00, 31 October 2019,
+              HTTPSSVC)", draft-ietf-dnsop-svcb-httpssvc-00 (work in
+              progress), 31 October 2019,
               <http://www.ietf.org/internet-drafts/draft-ietf-dnsop-
               svcb-httpssvc-00.txt>.
 
    [RFC1034]  Mockapetris, P.V., "Domain names - concepts and
               facilities", STD 13, RFC 1034, DOI 10.17487/RFC1034,
               November 1987, <https://www.rfc-editor.org/info/rfc1034>.
-
 
 
 
