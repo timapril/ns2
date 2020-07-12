@@ -253,7 +253,9 @@ The ServiceForm version of NS2 returnes sufficent information to the client comm
 
 # DNSSEC and NS2
 
-When NS2 and NS2T records exist in a zone (parent, child or unrelated) and the zone is signed, the records SHOULD be included in the DNSSEC signing.
+Like with NS records, the NS2 records in the child zone SHOULD be signed when the zone is DNSSEC signed. The NS2 records that appear in the parent zone would not be signed, as is the case with NS records.
+
+NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
 # Security Considerations
 
@@ -372,6 +374,7 @@ pre-00
 
 * Removed DS and DNSKEY SvcParamFields. Avoids issues with DNSSEC signing in the parent.
 * Removed IPv{4,6}Hints SvcParamFields. There was a discussion on DNSOP about how glue is required
+* Updating when to sign the NS2 / NS2T records (removed signing in the parent)
 
 # Discussions
 
