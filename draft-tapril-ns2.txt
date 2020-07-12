@@ -84,24 +84,24 @@ Table of Contents
        2.3.3.  SvcParamKeys  . . . . . . . . . . . . . . . . . . . .   7
      2.4.  Deployment Considerations . . . . . . . . . . . . . . . .  10
        2.4.1.  AliasForm and ServiceForm in the Parent . . . . . . .  10
-       2.4.2.  Rollout . . . . . . . . . . . . . . . . . . . . . . .  11
+       2.4.2.  Rollout . . . . . . . . . . . . . . . . . . . . . . .  10
        2.4.3.  Availability  . . . . . . . . . . . . . . . . . . . .  11
        2.4.4.  Multiple ServiceForm records for the same host or IP
                address . . . . . . . . . . . . . . . . . . . . . . .  11
-   3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  12
+   3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  11
      3.1.  Response Size Considerations  . . . . . . . . . . . . . .  12
      3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  12
    4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  12
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
-     5.1.  Availability of zones without NS  . . . . . . . . . . . .  13
-     5.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  13
-     5.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  13
-     5.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  13
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
+     5.1.  Availability of zones without NS  . . . . . . . . . . . .  12
+     5.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  12
+     5.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     5.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  12
      5.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
      6.1.  New registry for NS2 transports . . . . . . . . . . . . .  13
        6.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  13
-       6.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  14
+       6.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  13
      6.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  14
    7.  Informative References  . . . . . . . . . . . . . . . . . . .  15
    Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  16
@@ -394,20 +394,7 @@ April                    Expires 13 January 2021                [Page 7]
 Internet-Draft                     NS2                         July 2020
 
 
-2.3.3.1.  "ipv4hint" and "ipv6hint"
-
-   The "ipv4hint" and "ipv6hint" SvcParamKeys are defined in
-   [I-D.draft-ietf-dnsop-svcb-httpssvc-00].  The NS2 and NS2T records
-   can makes use of the same keys to indicate the IP address(es) of the
-   server referenced in the SvcDomainname field. "ipv4hint" and
-   "ipv6hint" supersede existing glue records for a name but not A or
-   AAAA records in the child.  When not present, glue records MAY be
-   used to locate the delegated nameserver.
-
-   See [I-D.draft-ietf-dnsop-svcb-httpssvc-00] for the usage, wire and
-   display formatting for this SvcParamKey.
-
-2.3.3.2.  "transports"
+2.3.3.1.  "transports"
 
    The "transports" SvcParamKey defines the list of transports offered
    by the nameserver named in the SvcDomainName.
@@ -442,6 +429,19 @@ Internet-Draft                     NS2                         July 2020
    order of available transports with the set of transports it supports
    to determine how to contact the selected nameserver.
 
+   The presentation format of the SvcParamValue is a comma delimited
+   quoted string of the available transport names.  The wire format for
+   the SvcParamValue is a string of 16-bit integers representing the
+   TransportKey values as described in the "NS2/NS2T Transport Parameter
+   Registry".
+
+2.3.3.2.  "dnsDotEarlyData"
+
+   The "dnsDotEarlyData" SvcParamKey indicates if the server will accept
+   requests with TLS 1.3 Early Data as described in
+   [I-D.draft-ghedini-dprive-early-data-01].  If the "dot" transport is
+   enabled on the record but this value is not present, the default
+   value is that the server will not accept early data.
 
 
 
@@ -449,20 +449,6 @@ April                    Expires 13 January 2021                [Page 8]
 
 Internet-Draft                     NS2                         July 2020
 
-
-   The presentation format of the SvcParamValue is a comma delimited
-   quoted string of the available transport names.  The wire format for
-   the SvcParamValue is a string of 16-bit integers representing the
-   TransportKey values as described in the "NS2/NS2T Transport Parameter
-   Registry".
-
-2.3.3.3.  "dnsDotEarlyData"
-
-   The "dnsDotEarlyData" SvcParamKey indicates if the server will accept
-   requests with TLS 1.3 Early Data as described in
-   [I-D.draft-ghedini-dprive-early-data-01].  If the "dot" transport is
-   enabled on the record but this value is not present, the default
-   value is that the server will not accept early data.
 
    The presentation format of the SvcParamValue is the string "true" or
    "false".  The wire format of the SvcParamValue is to not have the key
@@ -474,7 +460,7 @@ Internet-Draft                     NS2                         July 2020
    DRAFT NOTE: Should this be "ns2flags" and just have a 16 bit field
    for boolean values?
 
-2.3.3.4.  "dnsDohURITemplate"
+2.3.3.3.  "dnsDohURITemplate"
 
    The "dnsDohURITemplate" SvcParamKey defines the URI template to be
    used for issuing DNS-over-HTTPS queries to the nameserver defined in
@@ -497,6 +483,20 @@ Internet-Draft                     NS2                         July 2020
    wire form of the SvcParamValue is an octet string of the URI template
    as defined in [RFC8484].
 
+2.3.3.4.  "esniconfig"
+
+   The "esnikeys" SvcParamKey is defined in
+   [I-D.draft-ietf-dnsop-svcb-httpssvc-00].  It can be used to provide
+   the ESNI key for DoT, DoH and/or future protocols which may make use
+   of ESNI for session establishment.  See
+   [I-D.draft-ietf-dnsop-svcb-httpssvc-00] for the usage, wire, and
+   display formatting for this SvcParamKey.
+
+
+
+
+
+
 
 
 
@@ -506,16 +506,7 @@ April                    Expires 13 January 2021                [Page 9]
 Internet-Draft                     NS2                         July 2020
 
 
-2.3.3.5.  "esniconfig"
-
-   The "esnikeys" SvcParamKey is defined in
-   [I-D.draft-ietf-dnsop-svcb-httpssvc-00].  It can be used to provide
-   the ESNI key for DoT, DoH and/or future protocols which may make use
-   of ESNI for session establishment.  See
-   [I-D.draft-ietf-dnsop-svcb-httpssvc-00] for the usage, wire, and
-   display formatting for this SvcParamKey.
-
-2.3.3.6.  "dnsTlsFingerprints"
+2.3.3.5.  "dnsTlsFingerprints"
 
    The "dnsTlsFingerprints" SvcParamKey is a list of fingerprints for
    the TLS certificates that may be presented by the nameserver.  This
@@ -549,19 +540,6 @@ Internet-Draft                     NS2                         July 2020
    it is decided that this should contradict SVCB, maybe we should try
    to change SVCB.
 
-
-
-
-
-
-
-
-
-April                    Expires 13 January 2021               [Page 10]
-
-Internet-Draft                     NS2                         July 2020
-
-
 2.4.2.  Rollout
 
    When introduced, the NS2 and NS2T record will likely not be supported
@@ -576,6 +554,13 @@ Internet-Draft                     NS2                         July 2020
    MAY include NS2 records in the additionals section of responses to
    encourage resolvers to upgrade?  What about an ECS option from the
    authority to signal that it is capable of alternat transports?
+
+
+
+April                    Expires 13 January 2021               [Page 10]
+
+Internet-Draft                     NS2                         July 2020
+
 
 2.4.3.  Availability
 
@@ -611,13 +596,6 @@ Internet-Draft                     NS2                         July 2020
 
    are the same as:
 
-
-
-April                    Expires 13 January 2021               [Page 11]
-
-Internet-Draft                     NS2                         July 2020
-
-
   example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
                   dnsTlsFingerprints=["MIIS987SSLKJ...123===",
                       "MII3SODKSLKJ...456==="] )
@@ -630,6 +608,15 @@ Internet-Draft                     NS2                         July 2020
    authoritative nameserver receives a query for a name that it intendes
    to refer to another server, the nameserver SHOULD be provided NS2
    records in addition to NS records in the delegation.
+
+
+
+
+
+April                    Expires 13 January 2021               [Page 11]
+
+Internet-Draft                     NS2                         July 2020
+
 
 3.1.  Response Size Considerations
 
@@ -664,16 +651,6 @@ Internet-Draft                     NS2                         July 2020
    unrelated) and the zone is signed, the records SHOULD be included in
    the DNSSEC signing.
 
-
-
-
-
-
-April                    Expires 13 January 2021               [Page 12]
-
-Internet-Draft                     NS2                         July 2020
-
-
 5.  Security Considerations
 
    TODO: Fill this section out
@@ -685,6 +662,17 @@ Internet-Draft                     NS2                         July 2020
 5.3.  Parsing
 
 5.4.  Availability
+
+
+
+
+
+
+
+April                    Expires 13 January 2021               [Page 12]
+
+Internet-Draft                     NS2                         July 2020
+
 
 5.5.  Connetion Failures
 
@@ -722,14 +710,6 @@ Internet-Draft                     NS2                         July 2020
 
    *  TransportKey: A numeric identifier (range 0-65535)
 
-
-
-
-April                    Expires 13 January 2021               [Page 13]
-
-Internet-Draft                     NS2                         July 2020
-
-
    *  Meaning: a short description
 
    *  Protocol Specification
@@ -740,6 +720,15 @@ Internet-Draft                     NS2                         July 2020
 
    The "NS2/NS2T Transport Parameter Registry" shall initially be
    populated with the registrations below:
+
+
+
+
+
+April                    Expires 13 January 2021               [Page 13]
+
+Internet-Draft                     NS2                         July 2020
+
 
    +==============+========+================+===============+==========+
    | TransportKey | Name   | Meaning        | Protocol      |Reference |
@@ -776,16 +765,6 @@ Internet-Draft                     NS2                         July 2020
    This document defines new SvcParamKey values in the "Service Binding
    (SVCB) Parameter Registry".
 
-
-
-
-
-
-April                    Expires 13 January 2021               [Page 14]
-
-Internet-Draft                     NS2                         July 2020
-
-
      +=============+====================+=========+=================+
      | SvcParamKey | NAME               | Meaning | Reference       |
      +=============+====================+=========+=================+
@@ -799,6 +778,13 @@ Internet-Draft                     NS2                         July 2020
      +-------------+--------------------+---------+-----------------+
 
                                  Table 2
+
+
+
+April                    Expires 13 January 2021               [Page 14]
+
+Internet-Draft                     NS2                         July 2020
+
 
 7.  Informative References
 
@@ -835,13 +821,6 @@ Internet-Draft                     NS2                         July 2020
               facilities", STD 13, RFC 1034, DOI 10.17487/RFC1034,
               November 1987, <https://www.rfc-editor.org/info/rfc1034>.
 
-
-
-April                    Expires 13 January 2021               [Page 15]
-
-Internet-Draft                     NS2                         July 2020
-
-
    [RFC1035]  Mockapetris, P.V., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
@@ -855,6 +834,13 @@ Internet-Draft                     NS2                         July 2020
               of Named Entities (DANE) Transport Layer Security (TLS)
               Protocol: TLSA", RFC 6698, DOI 10.17487/RFC6698, August
               2012, <https://www.rfc-editor.org/info/rfc6698>.
+
+
+
+April                    Expires 13 January 2021               [Page 15]
+
+Internet-Draft                     NS2                         July 2020
+
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
@@ -891,13 +877,6 @@ Appendix B.  TODO
 
    *  add prohibition of AliasForm referring to AliasForm
 
-
-
-April                    Expires 13 January 2021               [Page 16]
-
-Internet-Draft                     NS2                         July 2020
-
-
    *  add out-of-bailiwick requirement for AliasForm
 
    *  worked out resolution example including alias form delegation
@@ -907,6 +886,17 @@ Internet-Draft                     NS2                         July 2020
    *  If NS2 is authoritative in the parent, does that mean that it will
       not be a referral anymore?  Probably a question for the working
       group
+
+
+
+
+
+
+
+April                    Expires 13 January 2021               [Page 16]
+
+Internet-Draft                     NS2                         July 2020
+
 
 Appendix C.  Change Log
 
@@ -947,15 +937,22 @@ Appendix C.  Change Log
 
    -01
 
+   *  Removed DS and DNSKEY SvcParamFields.  Avoids issues with DNSSEC
+      signing in the parent.
+
+   *  Removed IPv{4,6}Hints SvcParamFields.  There was a discussion on
+      DNSOP about how glue is required
+
+
+
+
+
 
 
 April                    Expires 13 January 2021               [Page 17]
 
 Internet-Draft                     NS2                         July 2020
 
-
-   *  Removed DS and DNSKEY SvcParamFields.  Avoids issues with DNSSEC
-      signing in the parent.
 
 Appendix D.  Discussions
 
@@ -986,6 +983,9 @@ Author's Address
    Akamai Technologies
 
    Email: ietf@tapril.net
+
+
+
 
 
 
