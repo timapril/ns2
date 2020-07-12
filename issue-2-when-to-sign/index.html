@@ -24,7 +24,7 @@
            class="html draft-tapril-ns2">html</a></td>
         <td><a href="./draft-tapril-ns2.txt"
            class="txt draft-tapril-ns2">plain text</a></td>
-        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://timapril.github.io/ns2/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/issue-2-when-to-sign/draft-tapril-ns2.txt>diff with master</a></td>
+        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://timapril.github.io/ns2/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/issue-2-when-to-sign/draft-tapril-ns2.txt>diff with </a></td>
         <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/issue-2-when-to-sign/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
           diff with last submission</a></td>
       </tr>
@@ -35,8 +35,8 @@
 //  http://creativecommons.org/publicdomain/zero/1.0/
 // @licend
 window.onload = function() {
-  var referrer_branch = 'master';
-  // e.g., "https://github.com/user/repo/tree/master"
+  var referrer_branch = '';
+  // e.g., "https://github.com/user/repo/tree/"
   var chunks = document.referrer.split("/");
   if (chunks[2] === 'github.com' && chunks[5] === 'tree') {
     referrer_branch = chunks[6];
