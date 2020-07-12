@@ -200,14 +200,6 @@ The "dnsTlsFingerprints" SvcParamKey is a list of fingerprints for the TLS certi
 
 The presentation and wire format of the SvcParamValue is the same as the presentation and wire format described for the TLSA record as defined in {{?RFC6698}}, sections 2.1 and 2.2 respectively.
 
-#### "ds" or "dnskey"
-
-The "ds" and "dnskey" SvcParamKey contain a list of hashes of the public key(s) used to sign the zone and the public key(s) for the zone respectively. Unline the DS and DNSKEY RRTypes, the “ds” and “dnskey” SvcParamKey values apply to the referenced resolver only, but the same values may be advertised for all records. For secure delegation, only one of these SvcParamKey is required in the NS2 or NS2T record, but both may be provided. The "ds" and "dnskey" SvcParamKey will supersede any DS or DNSKEY records available in the parent zone, but in the absence of these SvcParamKeys in the NS2 record, clients should defer to the DS or DNSKEY records if present. Having these keys in the NS2 record may reduce the number of queries that are required to delegate to the child nameserver, but can result in larger packet sizes. These larger packets could result in UDP fragmentation, forcing clients to upgrade the connection to unencrypted DNS over TCP.
-
-Multiple "ds" or "dnskey" SvcParamKeys MAY exist to provide multiple valid public keys for key rollovers or when using multiple signing methods.
-
-The wire format of the SvcParamValues is a list of values defined in {{?RFC4034}} for both the SvcParamValue for the "ds" SvcParamKey matching the DS RRType and the SvcParamValue for the "dnskey" SvcParamKey matching the DNSKEY RRType. The presentation format for both records is a quoted string list using the same presentation format defined in {{?RFC4034}} for both records.
-
 ## Deployment Considerations
 
 The NS2 and NS2T records intends to replace the NS record while also adding additional functionality in order to support additional transports for the DNS. Below are discussions of considerations for deployment.
@@ -234,7 +226,7 @@ As described in the "transport" SvcParamKey section above, a host or IP address 
 
 When those records have different SvcFieldPriority values, as in {{?I-D.draft-ietf-dnsop-svcb-httpssvc-00}}, lower-numbered priorities express a higher preference for that record.
 
-In the case where there are identical records other than the "ds" or "dnskey" fields, the records can be combined. In the below example, there are two records that have the same SvcDomainName, SvcFieldPriority, and SvcParamValues (other than "ds"). As a result, the NS2 records here:
+NS2 and NS2T records may have multiple values for the "dnsTlsFingerprints" SvcParamKey. Records that are identical other than the "dnsTlsFingerprints" SvcParamValues may be joined together including multiple "dnsTlsFingerprints" as seen in this example:
 
     example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
                     dnsTlsFingerprints="MIIS987SSLKJ...123===" )
@@ -267,7 +259,7 @@ The ServiceForm version of NS2 returnes sufficent information to the client comm
 
 # DNSSEC and NS2
 
-When NS2 and NS2T records exist in a zone (parent, child or unrelated) and the zone is signed, the records SHOULD be included in the DNSSEC signing. NS2 and NS2T records for the same label may have different SvcParamValues for the "ds" or "dnskey" SvcParamKeys. Validating resolvers need to carefully track which keying information corresponds to which (zones, resolver) tuple.
+When NS2 and NS2T records exist in a zone (parent, child or unrelated) and the zone is signed, the records SHOULD be included in the DNSSEC signing.
 
 # Security Considerations
 
@@ -315,10 +307,10 @@ The "NS2/NS2T Transport Parameter Registry" shall initially be populated with th
 | TransportKey | Name | Meaning | Protocol Specification | Reference |
 |--------------|------|---------|------------------------|-----------|
 | 0            | key0 | Reserved| Reserved              | (This Document) |
-| 1            | do53 | Unencrypted, Plaintext DNS over UDP or TCP | RFC1035             | (This Document) |
+| 1            | do53 | Unencrypted, Plaintext DNS over UDP or TCP | RFC1035 | (This Document) |
 | 2            | dot | DNS-over-TLS | RFC7858             | (This Document) |
 | 3            | doh | DNS-over-HTTPS | RFC8484            | (This Document) |
-| 4            | doq | DNS over Dedicated QUIC Connections | {{?I-D.draft-huitema-quic-dnsoquic-07}} |
+| 4            | doq | DNS over Dedicated QUIC Connections | {{?DOQ-I-D=I-D.draft-huitema-quic-dnsoquic-07}} |
 | 65280-65534  | keyNNNNN | Private Use | Private Use            | (This Document) |
 | 65535        | key65535 | Reserved| Reserved              | (This Document) |
 
@@ -332,9 +324,6 @@ This document defines new SvcParamKey values in the "Service Binding (SVCB) Para
 | TBD2        | dnsDotEarlyData | | (This Document) |
 | TBD3        | dnsDohURITemplate | | (This Document) |
 | TBD4        | dnsTlsFingerprints | | (This Document) |
-| TBD5        | ds | | (This Document) |
-| TBD6        | dnskey | | (This Document) |
-
 
 --- back
 
@@ -384,6 +373,11 @@ pre-00
 * collapse udp and tcp to the do53
 
 * added a second record (NS2 and NS2T)
+
+-01
+
+* Removed DS and DNSKEY SvcParamFields. Avoids issues with DNSSEC signing in the parent.
+
 
 # Discussions
 
