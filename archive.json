@@ -1,0 +1,301 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2020-07-12T17:59:58.527961+00:00",
+  "repo": "timapril/ns2",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU2NTE3NDg0OTk=",
+      "title": "Remove DS SvcParamField option",
+      "url": "https://github.com/timapril/ns2/issues/1",
+      "state": "CLOSED",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Removing the DS record will allow the NS2 record to e signed in the parent and avoid the DNSSEC parent signing issue.\n\nH/T: Ralf Weber, Sam Weiller, Matt Pounsett",
+      "createdAt": "2020-07-06T18:49:34Z",
+      "updatedAt": "2020-07-12T02:20:29Z",
+      "closedAt": "2020-07-12T02:20:29Z",
+      "comments": [
+        {
+          "author": "jrlevine",
+          "authorAssociation": "NONE",
+          "body": "That makes it inconsistent with NS and I think messes up the semantics. NS2 at zone cut should be signed in the child, not the parent.",
+          "createdAt": "2020-07-09T22:37:30Z",
+          "updatedAt": "2020-07-09T22:37:30Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU2NTE4MDQ5MTA=",
+      "title": "NS2 and NS2T SHOULD be DNSSEC signed",
+      "url": "https://github.com/timapril/ns2/issues/2",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "When ever authoritative (both in parent and child zones), NS2 and NS2T records should be signed.",
+      "createdAt": "2020-07-06T20:39:42Z",
+      "updatedAt": "2020-07-11T18:38:53Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jdreed",
+          "authorAssociation": "NONE",
+          "body": "(copying from discussion elsewhere)\r\n\r\nI think it's worth touching on recommendations if only one can be signed?  (Which I think it usually the parent, since all the major TLDs are signed).",
+          "createdAt": "2020-07-08T20:00:56Z",
+          "updatedAt": "2020-07-08T20:00:56Z"
+        },
+        {
+          "author": "jrlevine",
+          "authorAssociation": "NONE",
+          "body": "In a zone file, only the NS at the apex are signed. The other NS at zone cuts are glue and are not signed.\r\nAdding to the confusion, the DS records at the zone cut _are_ signed, and have to match the signed DNSKEY at the child zone apex.\r\nI think it would be a problem to have competing authoritative RRSETs for the same rrtype and same name in parent and child. It would be a large change to DNSSEC semantics where currently there is only one source for any signed RRSET. (Multiple servers with the same zone as considered to be the same source.)",
+          "createdAt": "2020-07-11T18:38:53Z",
+          "updatedAt": "2020-07-11T18:38:53Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU2NTE4MDU1NjY=",
+      "title": "NS2 and NS2T SHOULD appear in parent and child",
+      "url": "https://github.com/timapril/ns2/issues/3",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "In the event that the parent does not support NS2, the records may be omitted. Resolvers that wish to use encrypted transport to authority servers MAY send a NS2 query to the child using the delegated nameservers from the parent.",
+      "createdAt": "2020-07-06T20:41:03Z",
+      "updatedAt": "2020-07-09T22:36:03Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jrlevine",
+          "authorAssociation": "NONE",
+          "body": "The NS records at the top of the child zone are authoritative. The ones in the parent are just glue. You need NS in the parent because that's the signal for a zone cut and I wouldn't change that, even though the client may ignore them in favor of NS2 or NS2T.",
+          "createdAt": "2020-07-09T22:36:03Z",
+          "updatedAt": "2020-07-09T22:36:03Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU2NTE4MjY1ODk=",
+      "title": "Draft should be clear about what records are returned when",
+      "url": "https://github.com/timapril/ns2/issues/4",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "NS2/NS2T should be returned when:\n\n1) The record type is queried directly\n2) For legacy DNS over UDP port 53, NS2/NS2T SHOULD be returned in the additional section when available and doing so will not trigger a truncation\n3) For legacy DNS over TCP port 53, NS2/NS2T SHOULD be returned in the additional section when available\n4) For Alternate transport protocols (DoH and DoT) NS2 and NS2T should be returned in the authority section\n\nReasoning\n1) It is unknown how resolvers will handle multiple authoritative RRTypes in the authority section of the response, leaving 2 and 3 as the additional section until either testing is done or a consensus is determined in DNSOP. Will add an editors note for now that covers this concern.\n2) Set to authority for 4 since there are no DoH or DoT to authorities",
+      "createdAt": "2020-07-06T21:21:14Z",
+      "updatedAt": "2020-07-06T21:21:14Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU2NTQ0MzU0NDk=",
+      "title": "ipv4hint and ipv6hint",
+      "url": "https://github.com/timapril/ns2/issues/5",
+      "state": "CLOSED",
+      "author": "jrlevine",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Recent discussions in DNSOP make it clear that it's mandatory to return A and AAAA glue so these hints are redundant in NS2.",
+      "createdAt": "2020-07-10T00:56:24Z",
+      "updatedAt": "2020-07-12T13:21:36Z",
+      "closedAt": "2020-07-12T13:21:36Z",
+      "comments": [
+        {
+          "author": "timapril",
+          "authorAssociation": "OWNER",
+          "body": "Good point. I'll pull that section and  I will add a section that indicates that in-baliwick glue for a delegation is required, like with NS records.",
+          "createdAt": "2020-07-11T18:21:57Z",
+          "updatedAt": "2020-07-11T18:21:57Z"
+        },
+        {
+          "author": "timapril",
+          "authorAssociation": "OWNER",
+          "body": "I forgot to include something about the in-bailiwick glue requirement",
+          "createdAt": "2020-07-12T13:12:29Z",
+          "updatedAt": "2020-07-12T13:12:29Z"
+        },
+        {
+          "author": "timapril",
+          "authorAssociation": "OWNER",
+          "body": "Never mind it was already covered in the section \"When to include glue\"",
+          "createdAt": "2020-07-12T13:21:36Z",
+          "updatedAt": "2020-07-12T13:21:36Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU2NTUyMzM0MzY=",
+      "title": "Add privacy considerations section",
+      "url": "https://github.com/timapril/ns2/issues/6",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "From rfc7344\n\nAll of the information handled or transmitted by this protocol is\n   public information published in the DNS.",
+      "createdAt": "2020-07-11T15:59:45Z",
+      "updatedAt": "2020-07-11T15:59:45Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU2NTUyMzM2NzM=",
+      "title": "Consider an similar approach to CDS/CDNSKEY for publication in the parent",
+      "url": "https://github.com/timapril/ns2/issues/7",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "this is a tricky thing to get right, probably better for its own document after the fact, maybe once this one has more work done to it.",
+      "createdAt": "2020-07-11T16:01:10Z",
+      "updatedAt": "2020-07-11T16:01:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "MDU6SXNzdWU2NTUzMTg2MDM=",
+      "title": "NS2 and NS2T at the same name ?",
+      "url": "https://github.com/timapril/ns2/issues/10",
+      "state": "OPEN",
+      "author": "jrlevine",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "As I understand it, NS2 is like NS and indicates a zone cut, while NS2T does not. At a zone cut, the authoritative copies of them are at the apex of the child zone and whatever is in the parent is glue except for the hack that parent DS is signed.\r\nI don't think I can come up with any signing scheme that works and allows both NS2 and NS2T at the same name. So how about saying you can't do that? The location of NS2T is arbitrary so I don't think that loses anything.\r\n\r\nBonus problem: if the NS2T can be below the zone cut, you'd need glue copies in the parent zone, which would lead to a rather convoluted process to follow the gluey NS2T, then check the DS/DNSKEY in the child zone, then see if there's an authoritative copy of the NS2T in the child and if not, unwind the whole thing. Again, that doesn't strike me as very useful so I'd suggest a rule that NS2T can't be below the target, nor can it be below the target of any NS needed to resolve its name to avoid resolution glue loops.\r\n\r\n",
+      "createdAt": "2020-07-12T02:44:59Z",
+      "updatedAt": "2020-07-12T15:48:19Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "fl1ger",
+          "authorAssociation": "NONE",
+          "body": "As an NS2T is not indicating a zone cut it can't be below a zone cut as it always has to be in the authoritative zone for the domain. I agree on the signing, lets keep it how DNSSEC is working currently.",
+          "createdAt": "2020-07-12T05:50:32Z",
+          "updatedAt": "2020-07-12T05:50:32Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 8,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDQ3ODQxMDUz",
+      "title": "Removing DS and DNSKEY SvcParamKeys from the draft #1",
+      "url": "https://github.com/timapril/ns2/pull/8",
+      "state": "MERGED",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Also fixing a formatting issue with the initial transport registry\r\ntable being too wide.",
+      "createdAt": "2020-07-12T02:19:33Z",
+      "updatedAt": "2020-07-12T02:19:56Z",
+      "baseRepository": "timapril/ns2",
+      "baseRefName": "main",
+      "baseRefOid": "1547138336a2506c89bd86fee5ef40da0039cb9c",
+      "headRepository": "timapril/ns2",
+      "headRefName": "issue-1-Remove-DS-SvcParamField",
+      "headRefOid": "781d4a8f99a45071da61c952bd969d54dfcc1c3c",
+      "closedAt": "2020-07-12T02:19:50Z",
+      "mergedAt": "2020-07-12T02:19:50Z",
+      "mergedBy": "timapril",
+      "mergeCommit": {
+        "oid": "99bc14909145e562c032d58bdc151ef04b66eb23"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDQ3ODQxMjkw",
+      "title": "Removing IPv{4,6}hints as discussed in #5",
+      "url": "https://github.com/timapril/ns2/pull/9",
+      "state": "MERGED",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-07-12T02:23:15Z",
+      "updatedAt": "2020-07-12T02:23:58Z",
+      "baseRepository": "timapril/ns2",
+      "baseRefName": "main",
+      "baseRefOid": "99bc14909145e562c032d58bdc151ef04b66eb23",
+      "headRepository": "timapril/ns2",
+      "headRefName": "issue-5-remove-iphints",
+      "headRefOid": "2ea0bb4a611e3e39d6c6fe266ea06c3ce8d13264",
+      "closedAt": "2020-07-12T02:23:58Z",
+      "mergedAt": "2020-07-12T02:23:57Z",
+      "mergedBy": "timapril",
+      "mergeCommit": {
+        "oid": "02517562b2ba54281454732622c8ecd11ef23be9"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
