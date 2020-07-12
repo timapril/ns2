@@ -147,12 +147,6 @@ DRAFT NOTE: Should u-label and a-label be expanded? I'm leaning towards not expa
 
 The following DNS SVCB parameters are defined for the NS2 and NS2T ServiceForms.
 
-#### "ipv4hint" and "ipv6hint"
-
-The "ipv4hint" and "ipv6hint" SvcParamKeys are defined in {{?I-D.draft-ietf-dnsop-svcb-httpssvc-00}}. The NS2 and NS2T records can makes use of the same keys to indicate the IP address(es) of the server referenced in the SvcDomainname field. "ipv4hint" and "ipv6hint" supersede existing glue records for a name but not A or AAAA records in the child. When not present, glue records MAY be used to locate the delegated nameserver.
-
-See {{?I-D.draft-ietf-dnsop-svcb-httpssvc-00}} for the usage, wire and display formatting for this SvcParamKey.
-
 #### "transports"
 
 The "transports" SvcParamKey defines the list of transports offered by the nameserver named in the SvcDomainName.
@@ -377,7 +371,7 @@ pre-00
 -01
 
 * Removed DS and DNSKEY SvcParamFields. Avoids issues with DNSSEC signing in the parent.
-
+* Removed IPv{4,6}Hints SvcParamFields. There was a discussion on DNSOP about how glue is required
 
 # Discussions
 
