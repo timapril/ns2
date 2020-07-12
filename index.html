@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>timapril/ns2 master preview</title>
+    <title>ns2/<repo> timapril preview</title>
     <meta name="viewport" content="initial-scale=1.0">
     <style type="text/css">/*<![CDATA[*/
       body { font-family: "Helvetica Neue","Open Sans",Helvetica,Calibri,sans-serif; }
@@ -13,18 +13,19 @@
     /*]]>*/</style>
   </head>
   <body>
-    <h1>Editor's drafts for master branch of <a href="https://github.com/timapril/ns2">timapril/ns2</a></h1>
+    <h1>Editor's drafts for timapril branch of <a href="https://github.com/ns2/<repo>/tree/timapril">ns2/<repo></a></h1>
     <p>View <a href="issues.html">saved issues</a>,
-      or the latest GitHub <a href="https://github.com/timapril/ns2/issues">issues</a>
-      and <a href="https://github.com/timapril/ns2/pulls">pull requests</a>.</p>
-    <table id="branch-master">
+      or the latest GitHub <a href="https://github.com/ns2/<repo>/issues">issues</a>
+      and <a href="https://github.com/ns2/<repo>/pulls">pull requests</a>.</p>
+    <table id="branch-timapril">
       <tr>
         <th>draft-tapril-ns2</th>
         <td><a href="./draft-tapril-ns2.html"
            class="html draft-tapril-ns2">html</a></td>
         <td><a href="./draft-tapril-ns2.txt"
            class="txt draft-tapril-ns2">plain text</a></td>
-        <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
+        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://ns2.github.io/<repo>/draft-tapril-ns2.txt&amp;url2=https://ns2.github.io/<repo>/timapril/draft-tapril-ns2.txt>diff with </a></td>
+        <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://ns2.github.io/<repo>/timapril/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
           diff with last submission</a></td>
       </tr>
     </table>
@@ -36,8 +37,8 @@
            class="html draft-tapril-ns2">html</a></td>
         <td><a href="issue-1-Remove-DS-SvcParamField/draft-tapril-ns2.txt"
            class="txt draft-tapril-ns2">plain text</a></td>
-        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://timapril.github.io/ns2/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/issue-1-Remove-DS-SvcParamField/draft-tapril-ns2.txt>diff with master</a></td>
-        <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/issue-1-Remove-DS-SvcParamField/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
+        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://ns2.github.io/<repo>/draft-tapril-ns2.txt&amp;url2=https://ns2.github.io/<repo>/timapril/issue-1-Remove-DS-SvcParamField/draft-tapril-ns2.txt>diff with </a></td>
+        <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://ns2.github.io/<repo>/timapril/issue-1-Remove-DS-SvcParamField/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
           diff with last submission</a></td>
       </tr>
     </table>
@@ -49,8 +50,8 @@
            class="html draft-tapril-ns2">html</a></td>
         <td><a href="main/draft-tapril-ns2.txt"
            class="txt draft-tapril-ns2">plain text</a></td>
-        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://timapril.github.io/ns2/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/main/draft-tapril-ns2.txt>diff with master</a></td>
-        <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://timapril.github.io/ns2/main/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
+        <td><a href=https://tools.ietf.org/rfcdiff?url1=https://ns2.github.io/<repo>/draft-tapril-ns2.txt&amp;url2=https://ns2.github.io/<repo>/timapril/main/draft-tapril-ns2.txt>diff with </a></td>
+        <td><a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-tapril-ns2.txt&amp;url2=https://ns2.github.io/<repo>/timapril/main/draft-tapril-ns2.txt" class="diff draft-tapril-ns2">
           diff with last submission</a></td>
       </tr>
     </table>
@@ -60,8 +61,8 @@
 //  http://creativecommons.org/publicdomain/zero/1.0/
 // @licend
 window.onload = function() {
-  var referrer_branch = 'master';
-  // e.g., "https://github.com/user/repo/tree/master"
+  var referrer_branch = '';
+  // e.g., "https://github.com/user/repo/tree/"
   var chunks = document.referrer.split("/");
   if (chunks[2] === 'github.com' && chunks[5] === 'tree') {
     referrer_branch = chunks[6];
