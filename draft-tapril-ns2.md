@@ -347,7 +347,7 @@ This document defines new SvcParamKey values in the "Service Binding (SVCB) Para
 
 # Acknowledgements
 
-Thank you to Erik Nygren, Ralf Weber, Jon Reed, Ben Kaduk, Mashooq Muhaimen, Jason Moreau, Jerrod Wiesman, Billy Tiemann, Gordon Marx and Brian Wellington for their comments and suggestions on this draft.
+Thank you to John Levine, Erik Nygren, Ralf Weber, Jon Reed, Ben Kaduk, Mashooq Muhaimen, Jason Moreau, Jerrod Wiesman, Billy Tiemann, Gordon Marx and Brian Wellington for their comments and suggestions on this draft.
 
 # TODO
 
