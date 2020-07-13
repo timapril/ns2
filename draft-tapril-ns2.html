@@ -7,7 +7,7 @@
 <title>Parameterized Nameserver Delegation with NS2 and NS2T</title>
 <meta content="Tim April" name="author">
 <meta content="
-       Within the DNS, there is no mechanism for authoritative servers to advertise which transport methods they are capable of. If secure transport methods are adopted by authoritative operators, protocol negotiation would be required. This document provides two new Resource Record Types, NS2 and NS2T, to facilitate that negotiation by allowing zone owners to signal how the authoritative nameserver(s) for their zone(s) may accept queries. 
+       Within the DNS, there is no mechanism for authoritative servers to advertise which transport methods they are capable of. If secure transport methods are adopted by authoritative operators, transport signaling would be required to negotiate how authoritative servers would be contacted by resolvers. This document provides two new Resource Record Types, NS2 and NS2T, to facilitate this negotiation by allowing zone owners to signal how the authoritative nameserver(s) for their zone(s) may accept queries. 
     " name="description">
 <meta content="xml2rfc 2.46.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -804,7 +804,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">April</td>
-<td class="center">Expires 13 January 2021</td>
+<td class="center">Expires 14 January 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -817,12 +817,12 @@ address div.right {
 <dd class="internet-draft">draft-tapril-ns2-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-07-12" class="published">12 July 2020</time>
+<time datetime="2020-07-13" class="published">13 July 2020</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-01-13">13 January 2021</time></dd>
+<dd class="expires"><time datetime="2021-01-14">14 January 2021</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -835,7 +835,7 @@ address div.right {
 <h1 id="title">Parameterized Nameserver Delegation with NS2 and NS2T</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Within the DNS, there is no mechanism for authoritative servers to advertise which transport methods they are capable of. If secure transport methods are adopted by authoritative operators, protocol negotiation would be required. This document provides two new Resource Record Types, NS2 and NS2T, to facilitate that negotiation by allowing zone owners to signal how the authoritative nameserver(s) for their zone(s) may accept queries.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">Within the DNS, there is no mechanism for authoritative servers to advertise which transport methods they are capable of. If secure transport methods are adopted by authoritative operators, transport signaling would be required to negotiate how authoritative servers would be contacted by resolvers. This document provides two new Resource Record Types, NS2 and NS2T, to facilitate this negotiation by allowing zone owners to signal how the authoritative nameserver(s) for their zone(s) may accept queries.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -864,7 +864,7 @@ address div.right {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 January 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 January 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -925,7 +925,7 @@ address div.right {
                 </ul>
 </li>
               <li class="toc compact ulEmpty" id="section-toc.1-1.2.2.3">
-                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-serviceform" class="xref">ServiceForm</a><a href="#section-toc.1-1.2.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-serviceform-record-type" class="xref">ServiceForm Record Type</a><a href="#section-toc.1-1.2.2.3.1" class="pilcrow">¶</a></p>
 <ul class="toc compact ulEmpty">
 <li class="toc compact ulEmpty" id="section-toc.1-1.2.2.3.2.1">
                     <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="xref">2.3.1</a>.  <a href="#name-svcfieldpriority" class="xref">SvcFieldPriority</a><a href="#section-toc.1-1.2.2.3.2.1.1" class="pilcrow">¶</a></p>
@@ -1046,7 +1046,7 @@ address div.right {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">Resolvers currently rely on the NS records in the parent and child zones to provide and confirm the nameservers that are authoritative for each zone. The Nameserver version 2 (NS2) record extends the functionality of the NS record to include additional information about how authoritative zone information can be queried, whether that be over alternate protocols or by using alternate protocol parameters. The NS2 record may be present at zone cuts but can also redirect resolvers to other nameservers for further redirection via the Nameserver Version 2 Target (NS2T) record, which does not indicate a zone cut.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">The NS2 and NS2T records uses the SVCB record format defined in <span>[<a href="#I-D.draft-ietf-dnsop-svcb-httpssvc-00" class="xref">I-D.draft-ietf-dnsop-svcb-httpssvc-00</a>]</span>, using a subset of the already defined service parameters as well as new parameters described in this document. Some, but not all, of the existing service parameters will also be available for NS2 and NS2T records. This document will outline the available parameters and their usage.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">The NS2 and NS2T records uses the SVCB record format defined in <span>[<a href="#I-D.draft-ietf-dnsop-svcb-https-00" class="xref">I-D.draft-ietf-dnsop-svcb-https-00</a>]</span>, using a subset of the already defined service parameters as well as new parameters described in this document. Some, but not all, of the existing service parameters will also be available for NS2 and NS2T records. This document will outline the available parameters and their usage.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="introductory-examples">
 <section id="section-1.1">
         <h3 id="name-introductory-examples">
@@ -1066,8 +1066,8 @@ ns2.example.com.    86400   IN  NS  192.0.2.2
 ns3.example.com.    86400   IN  NS  192.0.2.3
 </pre><a href="#section-1.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-1.1-3">In this example, the authoritative nameserver is delegating to both a DNS-over-TLS and DNS-over-HTTPS service running on ns.example.net for resolvers that support NS2, and also delegating to a nameserver that will serve unencrypted DNS over port 53 for those that do not.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.1-4">Like in SVCB, NS2 and NS2T also offer the ability to use the Alias form delegation. The example below shows an example where example.com is being delegated with NS2 to an AliasForm which can then be further resolved.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">In this example, the authoritative nameserver is delegating to both a DNS-over-TLS and DNS-over-HTTPS service running on ns2.example.net and ns3.example.com respectively, for resolvers that support NS2, and also delegating to ns1.example.com which will serve unencrypted DNS over port 53 for those that do not.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">Like in SVCB, NS2 and NS2T also offer the ability to use the Alias form delegation. The example below shows an example where example.com is being delegated with a NS2 AliasForm record which can then be further resolved to locate the authroitative nameserver(s).<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-1.1-5">
 <pre>
 example.com.  86400  IN NS2 0   ns2.example.net.
@@ -1078,9 +1078,9 @@ ns1.example.com.    86400   IN  NS  192.0.2.1
 <p id="section-1.1-6">The example.net authoritative server may return the following NS2T records in response to a query as deirected by the above records.<a href="#section-1.1-6" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-1.1-7">
 <pre>
-ns2.example.net 3600    IN NS2T ns1.example.org. ( transports=dot,
+ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=dot,
                 dnsTlsFingerprints=["MIIS987SSLKJ...123==="] )
-ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=doh,
+ns2.example.net 3600    IN NS2T ns3.example.org. ( transports=doh,
                 ddnsDohURITemplate="https://ns.example.net/q/{?dns}")
 </pre><a href="#section-1.1-7" class="pilcrow">¶</a>
 </div>
@@ -1094,7 +1094,7 @@ ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=doh,
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-goal-of-the-ns2-and-ns2t-re" class="section-name selfRef">Goal of the NS2 and NS2T Records</a>
         </h3>
 <p id="section-1.2-1">The primary goal of the NS2 and NS2T records is to provide zone owners a way to signal to clients how they may receive queries for the records for which they are authoritative. The NS2 and NS2T records are machine readable, can coexist with NS records in the same zone, and do not break software that does not support them.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">NS2 and NS2T are designed to allow child zones to publish NS2 and NS2T records, even when parent zones only publish NS records. Lack of parent zone support for NS2 records may arise for technical or policy reasons.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">NS2 and NS2T are designed to allow child zones to publish NS2 and NS2T records, even without support in the parent zone. Lack of parent zone support for NS2 records may arise for technical or policy reasons.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1186,10 +1186,10 @@ example.com.    86400    IN  NS2     0   customer1.example.org.
 </div>
 </section>
 </div>
-<div id="serviceform">
+<div id="serviceform-record-type">
 <section id="section-2.3">
-        <h3 id="name-serviceform">
-<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-serviceform" class="section-name selfRef">ServiceForm</a>
+        <h3 id="name-serviceform-record-type">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-serviceform-record-type" class="section-name selfRef">ServiceForm Record Type</a>
         </h3>
 <p id="section-2.3-1">The ServiceForm of the NS2 and NS2T records are likely to be the more popular of the two. They work the same way as the SVCB or HTTPSSVC records do by providing a priority and list of parameters associated with the SvcDomainName. In addition to being able to identify which protocols are supported by the authoriatative server, the ServiceForm record will also allow providers to operate different protocols on different addresses.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <div id="svcfieldpriority">
@@ -1596,6 +1596,10 @@ example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
       <dd>
 <span class="refAuthor">Huitema, C.</span><span class="refAuthor">, Shore, M.</span><span class="refAuthor">, Mankin, A.</span><span class="refAuthor">, Dickinson, S.</span><span class="refAuthor">, and J. Iyengar</span>, <span class="refTitle">"Specification of DNS over Dedicated QUIC Connections"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-huitema-quic-dnsoquic-07</span>, <time datetime="2019-09-07" class="refDate">7 September 2019</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-huitema-quic-dnsoquic-07.txt">http://www.ietf.org/internet-drafts/draft-huitema-quic-dnsoquic-07.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="I-D.draft-ietf-dnsop-svcb-https-00">[I-D.draft-ietf-dnsop-svcb-https-00]</dt>
+      <dd>
+<span class="refAuthor">Schwartz, B.</span><span class="refAuthor">, Bishop, M.</span><span class="refAuthor">, and E. Nygren</span>, <span class="refTitle">"Service binding and parameter specification via the DNS (DNS SVCB and HTTPS RRs)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-svcb-https-00</span>, <time datetime="2020-06-12" class="refDate">12 June 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-dnsop-svcb-https-00.txt">http://www.ietf.org/internet-drafts/draft-ietf-dnsop-svcb-https-00.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.draft-ietf-dnsop-svcb-httpssvc-00">[I-D.draft-ietf-dnsop-svcb-httpssvc-00]</dt>
       <dd>
 <span class="refAuthor">Schwartz, B.</span><span class="refAuthor">, Bishop, M.</span><span class="refAuthor">, and E. Nygren</span>, <span class="refTitle">"Service binding and parameter specification via the DNS (DNS SVCB and HTTPSSVC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-svcb-httpssvc-00</span>, <time datetime="2019-10-31" class="refDate">31 October 2019</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-dnsop-svcb-httpssvc-00.txt">http://www.ietf.org/internet-drafts/draft-ietf-dnsop-svcb-httpssvc-00.txt</a>&gt;</span>. </dd>
@@ -1722,6 +1726,8 @@ example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
         <li class="normal" id="section-appendix.c-5.2">Removed IPv{4,6}Hints SvcParamFields. There was a discussion on DNSOP about how glue is required<a href="#section-appendix.c-5.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-appendix.c-5.3">Updating when to sign the NS2 / NS2T records (removed signing in the parent)<a href="#section-appendix.c-5.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-appendix.c-5.4">Attempting to clean up the introduction, goals and motivations of the document<a href="#section-appendix.c-5.4" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
