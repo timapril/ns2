@@ -269,7 +269,7 @@ The ServiceForm version of NS2 returnes sufficent information to the client comm
 
 # DNSSEC and NS2
 
-Like with NS records, the NS2 records in the child zone SHOULD be signed when the zone is DNSSEC signed. The NS2 records that appear in the parent zone would not be signed, as is the case with NS records.
+Like with NS records, the NS2 records in the child zone SHOULD be signed when the zone is DNSSEC signed. The NS2 records that appear in the parent zone are glue and would not be signed, as is the case with NS records.
 
 NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
@@ -402,6 +402,7 @@ pre-00
 * Adding more clairty around when to include/expect the NS2/NS2T records
 * Adding this note that CNS2 will not be included in this draft
 * Prohibiting NS2 and NS2T from existing at the same name
+* Making the statement about the parent records being glue and should not be signed
 
 # Discussions
 
