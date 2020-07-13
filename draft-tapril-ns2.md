@@ -106,6 +106,10 @@ It should be noted that both NS2 and NS2T records may exist for the same label. 
 
 In the above case, the NS2 record for c1.example.org would only be used when trying to resolve names below c1.example.org. This reason is why when an AliasForm NS2 or NS2T record is encountered, the resolver MUST query for the NS2T record associated with the given name.
 
+Since the NS2 record is indicative of a zone cut while NS2T is not, names MUST NOT have but NS2 and NS2T records at the same time. If both records exist for the same name, the resolution should return SERVFAIL.
+
+DRAFT NOTE: Should this be a different error code? Should this drop the NS2T and just return NS2?
+
 ## AliasForm Record Type
 
 In order to take full advantage of the AliasForm of NS2 and NS2T, the parent, child and resolver must support these records. When supported, the use of the AliasForm will allow zone owners to delegate their zones to another operator with a single record in the parent. AliasForm NS2 records SHOULD appear in the child zone when used in the parent. If a resolver were to encounter an AliasForm NS2 or NS2T record, it would then resolve the name in the SvcDomainName of the original record using NS2T RR type to receive the either another AliasForm record or a ServiceForm NS2T record.
@@ -397,6 +401,7 @@ pre-00
 * Adding a privacy considerations section
 * Adding more clairty around when to include/expect the NS2/NS2T records
 * Adding this note that CNS2 will not be included in this draft
+* Prohibiting NS2 and NS2T from existing at the same name
 
 # Discussions
 
