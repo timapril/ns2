@@ -394,7 +394,9 @@ pre-00
 * Removed IPv{4,6}Hints SvcParamFields. There was a discussion on DNSOP about how glue is required
 * Updating when to sign the NS2 / NS2T records (removed signing in the parent)
 * Attempting to clean up the introduction, goals and motivations of the document
-* Adding a privact considerations section
+* Adding a privacy considerations section
+* Adding more clairty around when to include/expect the NS2/NS2T records
+* Adding this note that CNS2 will not be included in this draft
 
 # Discussions
 
@@ -403,6 +405,10 @@ Editor Note: Remove this full section before publication.
 ## Port Numbers
 
 Originally, I had added SvcParamKeys for port numbers for each of the protocols. There was a discussion that resulted in removing the port numbers, since it was added complexity that had little perceived use in the wild. These can be added back if there is a desire to have them. The original author included them as a way to provide the nameserver operator a way to differentiate incoming traffic when using the aliasform with lower TTLs and intelligent responses based on the client IP.
+
+## CNS2
+
+Client NS2, similar to CDS might be a way to provide support for getting NS2 records into the parent zone before going through the registrars, but that might be a tough thing to agree on at this point.
 
 ## Second Record Name
 
