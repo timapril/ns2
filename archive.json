@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-07-12T17:59:58.527961+00:00",
+  "timestamp": "2020-07-13T17:53:56.772123+00:00",
   "repo": "timapril/ns2",
   "labels": [
     {
@@ -79,15 +79,15 @@
       "id": "MDU6SXNzdWU2NTE4MDQ5MTA=",
       "title": "NS2 and NS2T SHOULD be DNSSEC signed",
       "url": "https://github.com/timapril/ns2/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "timapril",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "When ever authoritative (both in parent and child zones), NS2 and NS2T records should be signed.",
       "createdAt": "2020-07-06T20:39:42Z",
-      "updatedAt": "2020-07-11T18:38:53Z",
-      "closedAt": null,
+      "updatedAt": "2020-07-12T18:02:02Z",
+      "closedAt": "2020-07-12T18:02:02Z",
       "comments": [
         {
           "author": "jdreed",
@@ -211,9 +211,17 @@
       "labels": [],
       "body": "this is a tricky thing to get right, probably better for its own document after the fact, maybe once this one has more work done to it.",
       "createdAt": "2020-07-11T16:01:10Z",
-      "updatedAt": "2020-07-11T16:01:10Z",
+      "updatedAt": "2020-07-13T02:38:20Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "timapril",
+          "authorAssociation": "OWNER",
+          "body": "Basically reference back to RFC8078.\r\n\r\nThe child zone MUST be signed, CNS2 records MUST have a valid signature\r\n\r\nHaving this record type will reduce the demand on updating Registry Software, the EPP protocol and registrar support.\r\n\r\nShould the registry keep track of when the RRSIG expires and re-poll at that point? keeping in mind that it should not poll faster than a set threshold. ",
+          "createdAt": "2020-07-13T02:38:20Z",
+          "updatedAt": "2020-07-13T02:38:20Z"
+        }
+      ]
     },
     {
       "number": 10,
@@ -238,6 +246,22 @@
           "updatedAt": "2020-07-12T05:50:32Z"
         }
       ]
+    },
+    {
+      "number": 12,
+      "id": "MDU6SXNzdWU2NTU1MzczMzA=",
+      "title": "Take another pass at the motivation of NS2/NS2T",
+      "url": "https://github.com/timapril/ns2/issues/12",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "There are some comments that the motivation for the records are not as clear as they should be. Take another pass through that section to try and make it more clear.",
+      "createdAt": "2020-07-13T02:30:39Z",
+      "updatedAt": "2020-07-13T02:30:39Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -294,6 +318,60 @@
       "mergeCommit": {
         "oid": "02517562b2ba54281454732622c8ecd11ef23be9"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDQ3OTMzNzgw",
+      "title": "Cleaning up the signing requirements - #2",
+      "url": "https://github.com/timapril/ns2/pull/11",
+      "state": "MERGED",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Being more clear about when to sign NS2{,T}\r\nSwitching to not sign in the parent.",
+      "createdAt": "2020-07-12T18:00:04Z",
+      "updatedAt": "2020-07-12T18:01:43Z",
+      "baseRepository": "timapril/ns2",
+      "baseRefName": "main",
+      "baseRefOid": "02517562b2ba54281454732622c8ecd11ef23be9",
+      "headRepository": "timapril/ns2",
+      "headRefName": "issue-2-when-to-sign",
+      "headRefOid": "c0e50736539ff032f2395e33384b0f211eaa1d9f",
+      "closedAt": "2020-07-12T18:01:37Z",
+      "mergedAt": "2020-07-12T18:01:37Z",
+      "mergedBy": "timapril",
+      "mergeCommit": {
+        "oid": "5c79ff0b8479b2ba9b9e177a53e78a0c91c2314f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDQ4NDAzMTI4",
+      "title": "Readability: Addressing #12",
+      "url": "https://github.com/timapril/ns2/pull/13",
+      "state": "OPEN",
+      "author": "timapril",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Trying to make the goals, intro and motivation of the document more\r\nreabable.",
+      "createdAt": "2020-07-13T17:53:47Z",
+      "updatedAt": "2020-07-13T17:53:47Z",
+      "baseRepository": "timapril/ns2",
+      "baseRefName": "main",
+      "baseRefOid": "5c79ff0b8479b2ba9b9e177a53e78a0c91c2314f",
+      "headRepository": "timapril/ns2",
+      "headRefName": "issue-12-introduction",
+      "headRefOid": "9b78e7a68d1f67b653034d84e0db0a42e1d109cd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
