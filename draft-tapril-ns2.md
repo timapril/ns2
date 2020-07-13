@@ -257,6 +257,12 @@ Like with NS records, the NS2 records in the child zone SHOULD be signed when th
 
 NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
+# Privact Considerations
+
+All of the information handled or transmitted by this protocol is public information published in the DNS.
+
+While the records are transmitting public infomration, resolvers which are making use of records may be attemping to keep the information they are querying private from on-path observers. Privacy consious resolvers should query for this record at the apex of a zone when delegated from the parent to help establish an encrypted channel to the authority.
+
 # Security Considerations
 
 TODO: Fill this section out
@@ -376,6 +382,7 @@ pre-00
 * Removed IPv{4,6}Hints SvcParamFields. There was a discussion on DNSOP about how glue is required
 * Updating when to sign the NS2 / NS2T records (removed signing in the parent)
 * Attempting to clean up the introduction, goals and motivations of the document
+* Adding a privact considerations section
 
 # Discussions
 
