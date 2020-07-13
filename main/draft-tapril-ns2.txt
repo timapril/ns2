@@ -91,21 +91,21 @@ Table of Contents
    3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  11
      3.1.  Response Size Considerations  . . . . . . . . . . . . . .  12
      3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  12
-   4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  12
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-     5.1.  Availability of zones without NS  . . . . . . . . . . . .  12
-     5.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  12
-     5.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     5.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  12
-     5.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-     6.1.  New registry for NS2 transports . . . . . . . . . . . . .  13
-       6.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  13
-       6.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  13
-     6.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  14
-   7.  Informative References  . . . . . . . . . . . . . . . . . . .  15
-   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  16
-   Appendix B.  TODO . . . . . . . . . . . . . . . . . . . . . . . .  16
+   4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  13
+   5.  Privact Considerations  . . . . . . . . . . . . . . . . . . .  13
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+     6.1.  Availability of zones without NS  . . . . . . . . . . . .  13
+     6.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  13
+     6.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     6.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  13
+     6.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+     7.1.  New registry for NS2 transports . . . . . . . . . . . . .  14
+       7.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  14
+       7.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  14
+     7.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  15
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .  16
+   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  17
 
 
 
@@ -114,11 +114,12 @@ April                    Expires 14 January 2021                [Page 2]
 Internet-Draft                     NS2                         July 2020
 
 
-   Appendix C.  Change Log . . . . . . . . . . . . . . . . . . . . .  17
-   Appendix D.  Discussions  . . . . . . . . . . . . . . . . . . . .  18
-     D.1.  Port Numbers  . . . . . . . . . . . . . . . . . . . . . .  18
-     D.2.  Second Record Name  . . . . . . . . . . . . . . . . . . .  18
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  18
+   Appendix B.  TODO . . . . . . . . . . . . . . . . . . . . . . . .  17
+   Appendix C.  Change Log . . . . . . . . . . . . . . . . . . . . .  18
+   Appendix D.  Discussions  . . . . . . . . . . . . . . . . . . . .  19
+     D.1.  Port Numbers  . . . . . . . . . . . . . . . . . . . . . .  19
+     D.2.  Second Record Name  . . . . . . . . . . . . . . . . . . .  19
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
 
@@ -161,7 +162,6 @@ Internet-Draft                     NS2                         July 2020
    and ns3.example.com respectively, for resolvers that support NS2, and
    also delegating to ns1.example.com which will serve unencrypted DNS
    over port 53 for those that do not.
-
 
 
 
@@ -604,12 +604,12 @@ Internet-Draft                     NS2                         July 2020
 
 3.  Responses with NS2
 
-   NS2 and NS2T are intended to supersede the NS record.  When an
-   authoritative nameserver receives a query for a name that it intendes
-   to refer to another server, the nameserver SHOULD be provided NS2
-   records in addition to NS records in the delegation.
+   The NS2 and NS2T records are intended to supersede the NS record.  As
+   such, the NS2 records should be included in the response in the
+   following situations, assuming the records exist in the servers zone:
 
-
+   1) If the qtype is for NS2 or NS2T, the server should respond with
+   NS2 or NS2T respectively in the authority section of the response.
 
 
 
@@ -617,6 +617,28 @@ April                    Expires 14 January 2021               [Page 11]
 
 Internet-Draft                     NS2                         July 2020
 
+
+   2) For queries over unencrypted TCP port 53, any of the NS2 and NS2T
+   records SHOULD be included in the additional section of the response.
+
+   3) For queries over unencrypted UDP port 53, any of the NS2 and NS2T
+   records SHOULD be included in the additional section of the response
+   unless doing so would result in a truncated response.  For responses
+   that would require truncation, the resolver operator and/or
+   implementor may decide to truncate the response or exclude the
+   records from the response.
+
+   4) If encrypted transports are supported on the authority, the any
+   NS2 and NS2T records should be included in the authority section of
+   the respose.
+
+   DRAFT NOTE: It is unknown how resolvers will handle multiple
+   authoritative RRTypes in the authority section of the response,
+   leaving 2 and 3 as the additional section until either testing is
+   done or a consensus is determined in DNSOP/DPRIVE.
+
+   DRAFT NOTE: Suggesting authority for encrypted transport since it
+   would more closely align with the NS record.
 
 3.1.  Response Size Considerations
 
@@ -645,6 +667,13 @@ Internet-Draft                     NS2                         July 2020
    opprotunisitic upgrade of the connection to use non-Do53 for the
    initial setup.
 
+
+
+April                    Expires 14 January 2021               [Page 12]
+
+Internet-Draft                     NS2                         July 2020
+
+
 4.  DNSSEC and NS2
 
    Like with NS records, the NS2 records in the child zone SHOULD be
@@ -654,27 +683,31 @@ Internet-Draft                     NS2                         July 2020
 
    NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
-5.  Security Considerations
+5.  Privact Considerations
+
+   All of the information handled or transmitted by this protocol is
+   public information published in the DNS.
+
+   While the records are transmitting public infomration, resolvers
+   which are making use of records may be attemping to keep the
+   information they are querying private from on-path observers.
+   Privacy consious resolvers should query for this record at the apex
+   of a zone when delegated from the parent to help establish an
+   encrypted channel to the authority.
+
+6.  Security Considerations
 
    TODO: Fill this section out
 
-5.1.  Availability of zones without NS
+6.1.  Availability of zones without NS
 
-5.2.  Reflection Attacks
+6.2.  Reflection Attacks
 
-5.3.  Parsing
+6.3.  Parsing
 
-5.4.  Availability
+6.4.  Availability
 
-
-
-
-April                    Expires 14 January 2021               [Page 12]
-
-Internet-Draft                     NS2                         July 2020
-
-
-5.5.  Connetion Failures
+6.5.  Connetion Failures
 
    When a resolver attempts to access nameserver delegated by a NS2 or
    NST2 record, if a connection error occurs, such as a certificate
@@ -682,6 +715,20 @@ Internet-Draft                     NS2                         July 2020
    connect to the other nameservers delegated to until either exhausting
    the list or the resolver's policy indicates that they should treat
    the resoltion as failed.
+
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 13]
+
+Internet-Draft                     NS2                         July 2020
+
 
    The failure action when failing to resolve a name with NS2/NS2T due
    to connection erros is dependant on the resolver operators policies.
@@ -691,9 +738,9 @@ Internet-Draft                     NS2                         July 2020
    opportunisitic privacy resolvers may wish to attempt resolution using
    any NS records that may be present.
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  New registry for NS2 transports
+7.1.  New registry for NS2 transports
 
    The "NS2/NS2T Transport Parameter Registry" defines the namespace for
    parameters, including string representations and numeric values.
@@ -702,7 +749,7 @@ Internet-Draft                     NS2                         July 2020
 
    ACTION: create and include a reference to this registry.
 
-6.1.1.  Procedure
+7.1.1.  Procedure
 
    A registration MUST include the following fields:
 
@@ -716,7 +763,7 @@ Internet-Draft                     NS2                         July 2020
 
    *  Pointer to specification text
 
-6.1.2.  Initial Contents
+7.1.2.  Initial Contents
 
    The "NS2/NS2T Transport Parameter Registry" shall initially be
    populated with the registrations below:
@@ -725,7 +772,16 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 14 January 2021               [Page 13]
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 14]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -760,7 +816,7 @@ Internet-Draft                     NS2                         July 2020
 
                                   Table 1
 
-6.2.  New SvcParamKey Values
+7.2.  New SvcParamKey Values
 
    This document defines new SvcParamKey values in the "Service Binding
    (SVCB) Parameter Registry".
@@ -781,12 +837,12 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 14 January 2021               [Page 14]
+April                    Expires 14 January 2021               [Page 15]
 
 Internet-Draft                     NS2                         July 2020
 
 
-7.  Informative References
+8.  Informative References
 
    [DOQ-I-D]  Huitema, C., Shore, M., Mankin, A., Dickinson, S., and J.
               Iyengar, "Specification of DNS over Dedicated QUIC
@@ -837,7 +893,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 14 January 2021               [Page 15]
+April                    Expires 14 January 2021               [Page 16]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -893,7 +949,7 @@ Appendix B.  TODO
 
 
 
-April                    Expires 14 January 2021               [Page 16]
+April                    Expires 14 January 2021               [Page 17]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -949,7 +1005,7 @@ Appendix C.  Change Log
 
 
 
-April                    Expires 14 January 2021               [Page 17]
+April                    Expires 14 January 2021               [Page 18]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -962,6 +1018,8 @@ Internet-Draft                     NS2                         July 2020
 
    *  Attempting to clean up the introduction, goals and motivations of
       the document
+
+   *  Adding a privact considerations section
 
 Appendix D.  Discussions
 
@@ -1003,6 +1061,4 @@ Author's Address
 
 
 
-
-
-April                    Expires 14 January 2021               [Page 18]
+April                    Expires 14 January 2021               [Page 19]
