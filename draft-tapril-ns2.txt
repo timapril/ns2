@@ -72,33 +72,33 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Introductory Examples . . . . . . . . . . . . . . . . . .   3
      1.2.  Goal of the NS2 and NS2T Records  . . . . . . . . . . . .   4
-     1.3.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4
+     1.3.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   5
    2.  NS2 and NS2T Record Types . . . . . . . . . . . . . . . . . .   5
      2.1.  Difference between the records  . . . . . . . . . . . . .   5
      2.2.  AliasForm Record Type . . . . . . . . . . . . . . . . . .   6
-       2.2.1.  Multiple Service Providers  . . . . . . . . . . . . .   6
+       2.2.1.  Multiple Service Providers  . . . . . . . . . . . . .   7
        2.2.2.  Loop Prevention . . . . . . . . . . . . . . . . . . .   7
      2.3.  ServiceForm Record Type . . . . . . . . . . . . . . . . .   7
        2.3.1.  SvcFieldPriority  . . . . . . . . . . . . . . . . . .   7
-       2.3.2.  SvcDomainName . . . . . . . . . . . . . . . . . . . .   7
-       2.3.3.  SvcParamKeys  . . . . . . . . . . . . . . . . . . . .   7
+       2.3.2.  SvcDomainName . . . . . . . . . . . . . . . . . . . .   8
+       2.3.3.  SvcParamKeys  . . . . . . . . . . . . . . . . . . . .   8
      2.4.  Deployment Considerations . . . . . . . . . . . . . . . .  10
        2.4.1.  AliasForm and ServiceForm in the Parent . . . . . . .  10
-       2.4.2.  Rollout . . . . . . . . . . . . . . . . . . . . . . .  10
+       2.4.2.  Rollout . . . . . . . . . . . . . . . . . . . . . . .  11
        2.4.3.  Availability  . . . . . . . . . . . . . . . . . . . .  11
        2.4.4.  Multiple ServiceForm records for the same host or IP
                address . . . . . . . . . . . . . . . . . . . . . . .  11
-   3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  11
+   3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  12
      3.1.  Response Size Considerations  . . . . . . . . . . . . . .  12
-     3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  12
+     3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  13
    4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  13
    5.  Privact Considerations  . . . . . . . . . . . . . . . . . . .  13
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
      6.1.  Availability of zones without NS  . . . . . . . . . . . .  13
      6.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  13
      6.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  13
-     6.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  13
-     6.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
+     6.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  14
+     6.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  14
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
      7.1.  New registry for NS2 transports . . . . . . . . . . . . .  14
        7.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  14
@@ -118,8 +118,9 @@ Internet-Draft                     NS2                         July 2020
    Appendix C.  Change Log . . . . . . . . . . . . . . . . . . . . .  18
    Appendix D.  Discussions  . . . . . . . . . . . . . . . . . . . .  19
      D.1.  Port Numbers  . . . . . . . . . . . . . . . . . . . . . .  19
-     D.2.  Second Record Name  . . . . . . . . . . . . . . . . . . .  19
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  19
+     D.2.  CNS2  . . . . . . . . . . . . . . . . . . . . . . . . . .  19
+     D.3.  Second Record Name  . . . . . . . . . . . . . . . . . . .  19
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  20
 
 1.  Introduction
 
@@ -157,11 +158,10 @@ Internet-Draft                     NS2                         July 2020
    ns2.example.com.    86400   IN  NS  192.0.2.2
    ns3.example.com.    86400   IN  NS  192.0.2.3
 
-   In this example, the authoritative nameserver is delegating to both a
-   DNS-over-TLS and DNS-over-HTTPS service running on ns2.example.net
-   and ns3.example.com respectively, for resolvers that support NS2, and
-   also delegating to ns1.example.com which will serve unencrypted DNS
-   over port 53 for those that do not.
+
+
+
+
 
 
 
@@ -169,6 +169,12 @@ April                    Expires 14 January 2021                [Page 3]
 
 Internet-Draft                     NS2                         July 2020
 
+
+   In this example, the authoritative nameserver is delegating to both a
+   DNS-over-TLS and DNS-over-HTTPS service running on ns2.example.net
+   and ns3.example.com respectively, for resolvers that support NS2, and
+   also delegating to ns1.example.com which will serve unencrypted DNS
+   over port 53 for those that do not.
 
    Like in SVCB, NS2 and NS2T also offer the ability to use the Alias
    form delegation.  The example below shows an example where
@@ -207,13 +213,7 @@ Internet-Draft                     NS2                         July 2020
    parent zone support for NS2 records may arise for technical or policy
    reasons.
 
-1.3.  Terminology
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in BCP
-   14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
 
 
@@ -225,6 +225,14 @@ April                    Expires 14 January 2021                [Page 4]
 
 Internet-Draft                     NS2                         July 2020
 
+
+1.3.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
 2.  NS2 and NS2T Record Types
 
@@ -267,14 +275,6 @@ customer.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
    It should be noted that both NS2 and NS2T records may exist for the
    same label.  Below is an example of this:
 
- example.com.  86400  IN NS2 0   c1.example.org.
- c1.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
- c1.example.org.  86400  IN NS2  1   ns3.example.net. ( transports=dot )
- test.c1.example.org. 600 IN A 192.0.2.1
-
-
-
-
 
 
 April                    Expires 14 January 2021                [Page 5]
@@ -282,11 +282,24 @@ April                    Expires 14 January 2021                [Page 5]
 Internet-Draft                     NS2                         July 2020
 
 
+ example.com.  86400  IN NS2 0   c1.example.org.
+ c1.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
+ c1.example.org.  86400  IN NS2  1   ns3.example.net. ( transports=dot )
+ test.c1.example.org. 600 IN A 192.0.2.1
+
    In the above case, the NS2 record for c1.example.org would only be
    used when trying to resolve names below c1.example.org.  This reason
    is why when an AliasForm NS2 or NS2T record is encountered, the
    resolver MUST query for the NS2T record associated with the given
    name.
+
+   Since the NS2 record is indicative of a zone cut while NS2T is not,
+   names MUST NOT have but NS2 and NS2T records at the same time.  If
+   both records exist for the same name, the resolution should return
+   SERVFAIL.
+
+   DRAFT NOTE: Should this be a different error code?  Should this drop
+   the NS2T and just return NS2?
 
 2.2.  AliasForm Record Type
 
@@ -310,6 +323,21 @@ Internet-Draft                     NS2                         July 2020
    resolver should resolve the RR type NS2T for the name
    customer1.example.net.
 
+
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021                [Page 6]
+
+Internet-Draft                     NS2                         July 2020
+
+
 2.2.1.  Multiple Service Providers
 
    Some zone owners may wish to use multiple providers to serve their
@@ -325,18 +353,6 @@ Internet-Draft                     NS2                         July 2020
    DRAFT NOTE: SVCB says that there "SHOULD only have a single RR".
    This ignores that but keep the randomization part.  Section 2.5p1 of
    SVCB
-
-
-
-
-
-
-
-
-April                    Expires 14 January 2021                [Page 6]
-
-Internet-Draft                     NS2                         July 2020
-
 
 2.2.2.  Loop Prevention
 
@@ -367,6 +383,17 @@ Internet-Draft                     NS2                         July 2020
    SHOULD be used to dictate the priority when multiple NS2 or NS2T
    records are returned.
 
+
+
+
+
+
+
+April                    Expires 14 January 2021                [Page 7]
+
+Internet-Draft                     NS2                         July 2020
+
+
 2.3.2.  SvcDomainName
 
    As defined in the SVCB document
@@ -385,14 +412,6 @@ Internet-Draft                     NS2                         July 2020
 
    The following DNS SVCB parameters are defined for the NS2 and NS2T
    ServiceForms.
-
-
-
-
-April                    Expires 14 January 2021                [Page 7]
-
-Internet-Draft                     NS2                         July 2020
-
 
 2.3.3.1.  "transports"
 
@@ -424,6 +443,13 @@ Internet-Draft                     NS2                         July 2020
       over DNS over Dedicated QUIC Connections
       [I-D.draft-huitema-quic-dnsoquic-07]
 
+
+
+April                    Expires 14 January 2021                [Page 8]
+
+Internet-Draft                     NS2                         July 2020
+
+
    The order of the keys in the list dictate the order which the
    nameserver SHOULD be contacted in.  The client SHOULD compare the
    order of available transports with the set of transports it supports
@@ -442,13 +468,6 @@ Internet-Draft                     NS2                         July 2020
    [I-D.draft-ghedini-dprive-early-data-01].  If the "dot" transport is
    enabled on the record but this value is not present, the default
    value is that the server will not accept early data.
-
-
-
-April                    Expires 14 January 2021                [Page 8]
-
-Internet-Draft                     NS2                         July 2020
-
 
    The presentation format of the SvcParamValue is the string "true" or
    "false".  The wire format of the SvcParamValue is to not have the key
@@ -479,6 +498,14 @@ Internet-Draft                     NS2                         July 2020
    example.com.  86400 IN NS2 3 ns.example.net. ( transports=doh,
    dnsDohURITemplate="https://doh.example.org/q/{?dns}" )
 
+
+
+
+April                    Expires 14 January 2021                [Page 9]
+
+Internet-Draft                     NS2                         July 2020
+
+
    The presentation format of the SvcParamValue is a quoted string.  The
    wire form of the SvcParamValue is an octet string of the URI template
    as defined in [RFC8484].
@@ -491,20 +518,6 @@ Internet-Draft                     NS2                         July 2020
    of ESNI for session establishment.  See
    [I-D.draft-ietf-dnsop-svcb-httpssvc-00] for the usage, wire, and
    display formatting for this SvcParamKey.
-
-
-
-
-
-
-
-
-
-
-April                    Expires 14 January 2021                [Page 9]
-
-Internet-Draft                     NS2                         July 2020
-
 
 2.3.3.5.  "dnsTlsFingerprints"
 
@@ -540,6 +553,15 @@ Internet-Draft                     NS2                         July 2020
    it is decided that this should contradict SVCB, maybe we should try
    to change SVCB.
 
+
+
+
+
+April                    Expires 14 January 2021               [Page 10]
+
+Internet-Draft                     NS2                         July 2020
+
+
 2.4.2.  Rollout
 
    When introduced, the NS2 and NS2T record will likely not be supported
@@ -554,13 +576,6 @@ Internet-Draft                     NS2                         July 2020
    MAY include NS2 records in the additionals section of responses to
    encourage resolvers to upgrade?  What about an ECS option from the
    authority to signal that it is capable of alternat transports?
-
-
-
-April                    Expires 14 January 2021               [Page 10]
-
-Internet-Draft                     NS2                         July 2020
-
 
 2.4.3.  Availability
 
@@ -596,6 +611,13 @@ Internet-Draft                     NS2                         July 2020
 
    are the same as:
 
+
+
+April                    Expires 14 January 2021               [Page 11]
+
+Internet-Draft                     NS2                         July 2020
+
+
   example.com.  86400  IN NS2    2 ns.example.net. ( transports=dot,
                   dnsTlsFingerprints=["MIIS987SSLKJ...123===",
                       "MII3SODKSLKJ...456==="] )
@@ -610,13 +632,6 @@ Internet-Draft                     NS2                         July 2020
 
    1) If the qtype is for NS2 or NS2T, the server should respond with
    NS2 or NS2T respectively in the authority section of the response.
-
-
-
-April                    Expires 14 January 2021               [Page 11]
-
-Internet-Draft                     NS2                         July 2020
-
 
    2) For queries over unencrypted TCP port 53, any of the NS2 and NS2T
    records SHOULD be included in the additional section of the response.
@@ -650,6 +665,15 @@ Internet-Draft                     NS2                         July 2020
    possible, ideally 4096 bytes, to allow the authoritative server to
    respond without truncating whenever possible.
 
+
+
+
+
+April                    Expires 14 January 2021               [Page 12]
+
+Internet-Draft                     NS2                         July 2020
+
+
 3.2.  When to include glue
 
    Like with NS, when a parent is delegating to a child that is in
@@ -666,13 +690,6 @@ Internet-Draft                     NS2                         July 2020
    have a pre-agreed upon configuration for the server or attempt
    opprotunisitic upgrade of the connection to use non-Do53 for the
    initial setup.
-
-
-
-April                    Expires 14 January 2021               [Page 12]
-
-Internet-Draft                     NS2                         July 2020
-
 
 4.  DNSSEC and NS2
 
@@ -705,6 +722,14 @@ Internet-Draft                     NS2                         July 2020
 
 6.3.  Parsing
 
+
+
+
+April                    Expires 14 January 2021               [Page 13]
+
+Internet-Draft                     NS2                         July 2020
+
+
 6.4.  Availability
 
 6.5.  Connetion Failures
@@ -715,20 +740,6 @@ Internet-Draft                     NS2                         July 2020
    connect to the other nameservers delegated to until either exhausting
    the list or the resolver's policy indicates that they should treat
    the resoltion as failed.
-
-
-
-
-
-
-
-
-
-
-April                    Expires 14 January 2021               [Page 13]
-
-Internet-Draft                     NS2                         July 2020
-
 
    The failure action when failing to resolve a name with NS2/NS2T due
    to connection erros is dependant on the resolver operators policies.
@@ -767,17 +778,6 @@ Internet-Draft                     NS2                         July 2020
 
    The "NS2/NS2T Transport Parameter Registry" shall initially be
    populated with the registrations below:
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1019,7 +1019,14 @@ Internet-Draft                     NS2                         July 2020
    *  Attempting to clean up the introduction, goals and motivations of
       the document
 
-   *  Adding a privact considerations section
+   *  Adding a privacy considerations section
+
+   *  Adding more clairty around when to include/expect the NS2/NS2T
+      records
+
+   *  Adding this note that CNS2 will not be included in this draft
+
+   *  Prohibiting NS2 and NS2T from existing at the same name
 
 Appendix D.  Discussions
 
@@ -1036,13 +1043,28 @@ D.1.  Port Numbers
    using the aliasform with lower TTLs and intelligent responses based
    on the client IP.
 
-D.2.  Second Record Name
+D.2.  CNS2
+
+   Client NS2, similar to CDS might be a way to provide support for
+   getting NS2 records into the parent zone before going through the
+   registrars, but that might be a tough thing to agree on at this
+   point.
+
+D.3.  Second Record Name
 
    Selected NS2T for Nameserver 2 Target since the record defines the
    target authoritative servers.
 
    ~~~ 01234567890123456789012345678901234567890123456789012345678901234
    567891
+
+
+
+
+April                    Expires 14 January 2021               [Page 19]
+
+Internet-Draft                     NS2                         July 2020
+
 
 Author's Address
 
@@ -1061,4 +1083,38 @@ Author's Address
 
 
 
-April                    Expires 14 January 2021               [Page 19]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 20]
