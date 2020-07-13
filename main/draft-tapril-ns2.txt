@@ -4,8 +4,8 @@
 
 dnsop                                                           T. April
 Internet-Draft                                       Akamai Technologies
-Intended status: Informational                              12 July 2020
-Expires: 13 January 2021
+Intended status: Informational                              13 July 2020
+Expires: 14 January 2021
 
 
          Parameterized Nameserver Delegation with NS2 and NS2T
@@ -15,9 +15,10 @@ Abstract
 
    Within the DNS, there is no mechanism for authoritative servers to
    advertise which transport methods they are capable of.  If secure
-   transport methods are adopted by authoritative operators, protocol
-   negotiation would be required.  This document provides two new
-   Resource Record Types, NS2 and NS2T, to facilitate that negotiation
+   transport methods are adopted by authoritative operators, transport
+   signaling would be required to negotiate how authoritative servers
+   would be contacted by resolvers.  This document provides two new
+   Resource Record Types, NS2 and NS2T, to facilitate this negotiation
    by allowing zone owners to signal how the authoritative nameserver(s)
    for their zone(s) may accept queries.
 
@@ -43,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 January 2021.
+   This Internet-Draft will expire on 14 January 2021.
 
 Copyright Notice
 
@@ -52,8 +53,7 @@ Copyright Notice
 
 
 
-
-April                    Expires 13 January 2021                [Page 1]
+April                    Expires 14 January 2021                [Page 1]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -78,7 +78,7 @@ Table of Contents
      2.2.  AliasForm Record Type . . . . . . . . . . . . . . . . . .   6
        2.2.1.  Multiple Service Providers  . . . . . . . . . . . . .   6
        2.2.2.  Loop Prevention . . . . . . . . . . . . . . . . . . .   7
-     2.3.  ServiceForm . . . . . . . . . . . . . . . . . . . . . . .   7
+     2.3.  ServiceForm Record Type . . . . . . . . . . . . . . . . .   7
        2.3.1.  SvcFieldPriority  . . . . . . . . . . . . . . . . . .   7
        2.3.2.  SvcDomainName . . . . . . . . . . . . . . . . . . . .   7
        2.3.3.  SvcParamKeys  . . . . . . . . . . . . . . . . . . . .   7
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-April                    Expires 13 January 2021                [Page 2]
+April                    Expires 14 January 2021                [Page 2]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -134,11 +134,11 @@ Internet-Draft                     NS2                         July 2020
    indicate a zone cut.
 
    The NS2 and NS2T records uses the SVCB record format defined in
-   [I-D.draft-ietf-dnsop-svcb-httpssvc-00], using a subset of the
-   already defined service parameters as well as new parameters
-   described in this document.  Some, but not all, of the existing
-   service parameters will also be available for NS2 and NS2T records.
-   This document will outline the available parameters and their usage.
+   [I-D.draft-ietf-dnsop-svcb-https-00], using a subset of the already
+   defined service parameters as well as new parameters described in
+   this document.  Some, but not all, of the existing service parameters
+   will also be available for NS2 and NS2T records.  This document will
+   outline the available parameters and their usage.
 
 1.1.  Introductory Examples
 
@@ -157,23 +157,23 @@ Internet-Draft                     NS2                         July 2020
    ns3.example.com.    86400   IN  NS  192.0.2.3
 
    In this example, the authoritative nameserver is delegating to both a
-   DNS-over-TLS and DNS-over-HTTPS service running on ns.example.net for
-   resolvers that support NS2, and also delegating to a nameserver that
-   will serve unencrypted DNS over port 53 for those that do not.
+   DNS-over-TLS and DNS-over-HTTPS service running on ns2.example.net
+   and ns3.example.com respectively, for resolvers that support NS2, and
+   also delegating to ns1.example.com which will serve unencrypted DNS
+   over port 53 for those that do not.
 
 
 
 
-
-April                    Expires 13 January 2021                [Page 3]
+April                    Expires 14 January 2021                [Page 3]
 
 Internet-Draft                     NS2                         July 2020
 
 
    Like in SVCB, NS2 and NS2T also offer the ability to use the Alias
    form delegation.  The example below shows an example where
-   example.com is being delegated with NS2 to an AliasForm which can
-   then be further resolved.
+   example.com is being delegated with a NS2 AliasForm record which can
+   then be further resolved to locate the authroitative nameserver(s).
 
    example.com.  86400  IN NS2 0   ns2.example.net.
    example.com.  86400  IN NS     ns1.example.com.
@@ -182,9 +182,9 @@ Internet-Draft                     NS2                         July 2020
    The example.net authoritative server may return the following NS2T
    records in response to a query as deirected by the above records.
 
-   ns2.example.net 3600    IN NS2T ns1.example.org. ( transports=dot,
+   ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=dot,
                    dnsTlsFingerprints=["MIIS987SSLKJ...123==="] )
-   ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=doh,
+   ns2.example.net 3600    IN NS2T ns3.example.org. ( transports=doh,
                    ddnsDohURITemplate="https://ns.example.net/q/{?dns}")
 
    The avbove records indicate to the client that the authoritative
@@ -203,9 +203,9 @@ Internet-Draft                     NS2                         July 2020
    zone, and do not break software that does not support them.
 
    NS2 and NS2T are designed to allow child zones to publish NS2 and
-   NS2T records, even when parent zones only publish NS records.  Lack
-   of parent zone support for NS2 records may arise for technical or
-   policy reasons.
+   NS2T records, even without support in the parent zone.  Lack of
+   parent zone support for NS2 records may arise for technical or policy
+   reasons.
 
 1.3.  Terminology
 
@@ -221,7 +221,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021                [Page 4]
+April                    Expires 14 January 2021                [Page 4]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -277,7 +277,7 @@ customer.example.org.  86400  IN NS2T 1   ns2.example.net. ( transports=dot )
 
 
 
-April                    Expires 13 January 2021                [Page 5]
+April                    Expires 14 January 2021                [Page 5]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -333,7 +333,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021                [Page 6]
+April                    Expires 14 January 2021                [Page 6]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -350,7 +350,7 @@ Internet-Draft                     NS2                         July 2020
    like with the handling of CNAME or NS, the server should respond to
    the client with SERVFAIL.
 
-2.3.  ServiceForm
+2.3.  ServiceForm Record Type
 
    The ServiceForm of the NS2 and NS2T records are likely to be the more
    popular of the two.  They work the same way as the SVCB or HTTPSSVC
@@ -389,7 +389,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021                [Page 7]
+April                    Expires 14 January 2021                [Page 7]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -445,7 +445,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021                [Page 8]
+April                    Expires 14 January 2021                [Page 8]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021                [Page 9]
+April                    Expires 14 January 2021                [Page 9]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -557,7 +557,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021               [Page 10]
+April                    Expires 14 January 2021               [Page 10]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021               [Page 11]
+April                    Expires 14 January 2021               [Page 11]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -647,9 +647,12 @@ Internet-Draft                     NS2                         July 2020
 
 4.  DNSSEC and NS2
 
-   When NS2 and NS2T records exist in a zone (parent, child or
-   unrelated) and the zone is signed, the records SHOULD be included in
-   the DNSSEC signing.
+   Like with NS records, the NS2 records in the child zone SHOULD be
+   signed when the zone is DNSSEC signed.  The NS2 records that appear
+   in the parent zone would not be signed, as is the case with NS
+   records.
+
+   NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
 5.  Security Considerations
 
@@ -666,10 +669,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-
-
-
-April                    Expires 13 January 2021               [Page 12]
+April                    Expires 14 January 2021               [Page 12]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -725,7 +725,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021               [Page 13]
+April                    Expires 14 January 2021               [Page 13]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -781,7 +781,7 @@ Internet-Draft                     NS2                         July 2020
 
 
 
-April                    Expires 13 January 2021               [Page 14]
+April                    Expires 14 January 2021               [Page 14]
 
 Internet-Draft                     NS2                         July 2020
 
@@ -809,6 +809,13 @@ Internet-Draft                     NS2                         July 2020
               <http://www.ietf.org/internet-drafts/draft-huitema-quic-
               dnsoquic-07.txt>.
 
+   [I-D.draft-ietf-dnsop-svcb-https-00]
+              Schwartz, B., Bishop, M., and E. Nygren, "Service binding
+              and parameter specification via the DNS (DNS SVCB and
+              HTTPS RRs)", Work in Progress, Internet-Draft, draft-ietf-
+              dnsop-svcb-https-00, 12 June 2020, <http://www.ietf.org/
+              internet-drafts/draft-ietf-dnsop-svcb-https-00.txt>.
+
    [I-D.draft-ietf-dnsop-svcb-httpssvc-00]
               Schwartz, B., Bishop, M., and E. Nygren, "Service binding
               and parameter specification via the DNS (DNS SVCB and
@@ -825,6 +832,16 @@ Internet-Draft                     NS2                         July 2020
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 15]
+
+Internet-Draft                     NS2                         July 2020
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -834,13 +851,6 @@ Internet-Draft                     NS2                         July 2020
               of Named Entities (DANE) Transport Layer Security (TLS)
               Protocol: TLSA", RFC 6698, DOI 10.17487/RFC6698, August
               2012, <https://www.rfc-editor.org/info/rfc6698>.
-
-
-
-April                    Expires 13 January 2021               [Page 15]
-
-Internet-Draft                     NS2                         July 2020
-
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
@@ -881,22 +891,18 @@ Appendix B.  TODO
 
    *  worked out resolution example including alias form delegation
 
+
+
+April                    Expires 14 January 2021               [Page 16]
+
+Internet-Draft                     NS2                         July 2020
+
+
    *  DoH URI teamplte does not include post
 
    *  If NS2 is authoritative in the parent, does that mean that it will
       not be a referral anymore?  Probably a question for the working
       group
-
-
-
-
-
-
-
-April                    Expires 13 January 2021               [Page 16]
-
-Internet-Draft                     NS2                         July 2020
-
 
 Appendix C.  Change Log
 
@@ -940,19 +946,22 @@ Appendix C.  Change Log
    *  Removed DS and DNSKEY SvcParamFields.  Avoids issues with DNSSEC
       signing in the parent.
 
-   *  Removed IPv{4,6}Hints SvcParamFields.  There was a discussion on
-      DNSOP about how glue is required
 
 
 
-
-
-
-
-April                    Expires 13 January 2021               [Page 17]
+April                    Expires 14 January 2021               [Page 17]
 
 Internet-Draft                     NS2                         July 2020
 
+
+   *  Removed IPv{4,6}Hints SvcParamFields.  There was a discussion on
+      DNSOP about how glue is required
+
+   *  Updating when to sign the NS2 / NS2T records (removed signing in
+      the parent)
+
+   *  Attempting to clean up the introduction, goals and motivations of
+      the document
 
 Appendix D.  Discussions
 
@@ -996,13 +1005,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-April                    Expires 13 January 2021               [Page 18]
+April                    Expires 14 January 2021               [Page 18]
