@@ -239,7 +239,19 @@ are the same as:
 
 # Responses with NS2
 
-NS2 and NS2T are intended to supersede the NS record. When an authoritative nameserver receives a query for a name that it intendes to refer to another server, the nameserver SHOULD be provided NS2 records in addition to NS records in the delegation.
+The NS2 and NS2T records are intended to supersede the NS record. As such, the NS2 records should be included in the response in the following situations, assuming the records exist in the servers zone:
+
+1) If the qtype is for NS2 or NS2T, the server should respond with NS2 or NS2T respectively in the authority section of the response.
+
+2) For queries over unencrypted TCP port 53, any of the NS2 and NS2T records SHOULD be included in the additional section of the response.
+
+3) For queries over unencrypted UDP port 53, any of the NS2 and NS2T records SHOULD be included in the additional section of the response unless doing so would result in a truncated response. For responses that would require truncation, the resolver operator and/or implementor may decide to truncate the response or exclude the records from the response.
+
+4) If encrypted transports are supported on the authority, the any NS2 and NS2T records should be included in the authority section of the respose.
+
+DRAFT NOTE: It is unknown how resolvers will handle multiple authoritative RRTypes in the authority section of the response, leaving 2 and 3 as the additional section until either testing is done or a consensus is determined in DNSOP/DPRIVE.
+
+DRAFT NOTE: Suggesting authority for encrypted transport since it would more closely align with the NS record.
 
 ## Response Size Considerations
 
