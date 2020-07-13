@@ -23,7 +23,7 @@ author:
 
 --- abstract
 
-Within the DNS, there is no mechanism for authoritative servers to advertise which transport methods they are capable of. If secure transport methods are adopted by authoritative operators, protocol negotiation would be required. This document provides two new Resource Record Types, NS2 and NS2T, to facilitate that negotiation by allowing zone owners to signal how the authoritative nameserver(s) for their zone(s) may accept queries.
+Within the DNS, there is no mechanism for authoritative servers to advertise which transport methods they are capable of. If secure transport methods are adopted by authoritative operators, transport signaling would be required to negotiate how authoritative servers would be contacted by resolvers. This document provides two new Resource Record Types, NS2 and NS2T, to facilitate this negotiation by allowing zone owners to signal how the authoritative nameserver(s) for their zone(s) may accept queries.
 
 --- middle
 
@@ -31,7 +31,7 @@ Within the DNS, there is no mechanism for authoritative servers to advertise whi
 
 Resolvers currently rely on the NS records in the parent and child zones to provide and confirm the nameservers that are authoritative for each zone. The Nameserver version 2 (NS2) record extends the functionality of the NS record to include additional information about how authoritative zone information can be queried, whether that be over alternate protocols or by using alternate protocol parameters. The NS2 record may be present at zone cuts but can also redirect resolvers to other nameservers for further redirection via the Nameserver Version 2 Target (NS2T) record, which does not indicate a zone cut.
 
-The NS2 and NS2T records uses the SVCB record format defined in {{?I-D.draft-ietf-dnsop-svcb-httpssvc-00}}, using a subset of the already defined service parameters as well as new parameters described in this document. Some, but not all, of the existing service parameters will also be available for NS2 and NS2T records. This document will outline the available parameters and their usage.
+The NS2 and NS2T records uses the SVCB record format defined in {{?I-D.draft-ietf-dnsop-svcb-https-00}}, using a subset of the already defined service parameters as well as new parameters described in this document. Some, but not all, of the existing service parameters will also be available for NS2 and NS2T records. This document will outline the available parameters and their usage.
 
 ## Introductory Examples
 
@@ -47,9 +47,9 @@ To introduce the NS2 and NS2T records, this example shows a possible response fr
     ns2.example.com.    86400   IN  NS  192.0.2.2
     ns3.example.com.    86400   IN  NS  192.0.2.3
 
-In this example, the authoritative nameserver is delegating to both a DNS-over-TLS and DNS-over-HTTPS service running on ns.example.net for resolvers that support NS2, and also delegating to a nameserver that will serve unencrypted DNS over port 53 for those that do not.
+In this example, the authoritative nameserver is delegating to both a DNS-over-TLS and DNS-over-HTTPS service running on ns2.example.net and ns3.example.com respectively, for resolvers that support NS2, and also delegating to ns1.example.com which will serve unencrypted DNS over port 53 for those that do not.
 
-Like in SVCB, NS2 and NS2T also offer the ability to use the Alias form delegation. The example below shows an example where example.com is being delegated with NS2 to an AliasForm which can then be further resolved.
+Like in SVCB, NS2 and NS2T also offer the ability to use the Alias form delegation. The example below shows an example where example.com is being delegated with a NS2 AliasForm record which can then be further resolved to locate the authroitative nameserver(s).
 
     example.com.  86400  IN NS2 0   ns2.example.net.
     example.com.  86400  IN NS     ns1.example.com.
@@ -57,9 +57,9 @@ Like in SVCB, NS2 and NS2T also offer the ability to use the Alias form delegati
 
 The example.net authoritative server may return the following NS2T records in response to a query as deirected by the above records.
 
-    ns2.example.net 3600    IN NS2T ns1.example.org. ( transports=dot,
+    ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=dot,
                     dnsTlsFingerprints=["MIIS987SSLKJ...123==="] )
-    ns2.example.net 3600    IN NS2T ns2.example.org. ( transports=doh,
+    ns2.example.net 3600    IN NS2T ns3.example.org. ( transports=doh,
                     ddnsDohURITemplate="https://ns.example.net/q/{?dns}")
 
 The avbove records indicate to the client that the authoritative nameservers for zones that Alias to ns2.example.net are ns1.example.org and ns2.example.rg with the configuration provided.
@@ -70,7 +70,7 @@ Later sections of this document will go into more detail on the resolution proce
 
 The primary goal of the NS2 and NS2T records is to provide zone owners a way to signal to clients how they may receive queries for the records for which they are authoritative. The NS2 and NS2T records are machine readable, can coexist with NS records in the same zone, and do not break software that does not support them.
 
-NS2 and NS2T are designed to allow child zones to publish NS2 and NS2T records, even when parent zones only publish NS records. Lack of parent zone support for NS2 records may arise for technical or policy reasons.
+NS2 and NS2T are designed to allow child zones to publish NS2 and NS2T records, even without support in the parent zone. Lack of parent zone support for NS2 records may arise for technical or policy reasons.
 
 ## Terminology
 
@@ -129,7 +129,7 @@ DRAFT NOTE: SVCB says that there "SHOULD only have a single RR". This ignores th
 
 Special care should be taken by both the zone owner and the delegated zone operator to ensure that a lookup loop is not created by having two AliasForm records rely on each other to serve the zone. Doing so may result in a resolution loop, and likely a denial of service. Any clients implementing NS2 and NS2T SHOULD implement a per-resolution limit of how many AliasForm records may be traversed when looking up a delegation to prevent infinite looping. When a loop is detected, like with the handling of CNAME or NS, the server should respond to the client with SERVFAIL.
 
-## ServiceForm
+## ServiceForm Record Type
 
 The ServiceForm of the NS2 and NS2T records are likely to be the more popular of the two. They work the same way as the SVCB or HTTPSSVC records do by providing a priority and list of parameters associated with the SvcDomainName. In addition to being able to identify which protocols are supported by the authoriatative server, the ServiceForm record will also allow providers to operate different protocols on different addresses.
 
@@ -375,6 +375,7 @@ pre-00
 * Removed DS and DNSKEY SvcParamFields. Avoids issues with DNSSEC signing in the parent.
 * Removed IPv{4,6}Hints SvcParamFields. There was a discussion on DNSOP about how glue is required
 * Updating when to sign the NS2 / NS2T records (removed signing in the parent)
+* Attempting to clean up the introduction, goals and motivations of the document
 
 # Discussions
 
