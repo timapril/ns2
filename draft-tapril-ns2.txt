@@ -92,20 +92,20 @@ Table of Contents
      3.1.  Response Size Considerations  . . . . . . . . . . . . . .  12
      3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  12
    4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  12
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-     5.1.  Availability of zones without NS  . . . . . . . . . . . .  12
-     5.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  12
-     5.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     5.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  12
-     5.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-     6.1.  New registry for NS2 transports . . . . . . . . . . . . .  13
-       6.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  13
-       6.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  13
-     6.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  14
-   7.  Informative References  . . . . . . . . . . . . . . . . . . .  15
+   5.  Privact Considerations  . . . . . . . . . . . . . . . . . . .  12
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+     6.1.  Availability of zones without NS  . . . . . . . . . . . .  13
+     6.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  13
+     6.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     6.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  13
+     6.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
+     7.1.  New registry for NS2 transports . . . . . . . . . . . . .  13
+       7.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  13
+       7.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  14
+     7.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  14
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .  15
    Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  16
-   Appendix B.  TODO . . . . . . . . . . . . . . . . . . . . . . . .  16
 
 
 
@@ -114,6 +114,7 @@ April                    Expires 14 January 2021                [Page 2]
 Internet-Draft                     NS2                         July 2020
 
 
+   Appendix B.  TODO . . . . . . . . . . . . . . . . . . . . . . . .  16
    Appendix C.  Change Log . . . . . . . . . . . . . . . . . . . . .  17
    Appendix D.  Discussions  . . . . . . . . . . . . . . . . . . . .  18
      D.1.  Port Numbers  . . . . . . . . . . . . . . . . . . . . . .  18
@@ -161,7 +162,6 @@ Internet-Draft                     NS2                         July 2020
    and ns3.example.com respectively, for resolvers that support NS2, and
    also delegating to ns1.example.com which will serve unencrypted DNS
    over port 53 for those that do not.
-
 
 
 
@@ -654,17 +654,17 @@ Internet-Draft                     NS2                         July 2020
 
    NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
-5.  Security Considerations
+5.  Privact Considerations
 
-   TODO: Fill this section out
+   All of the information handled or transmitted by this protocol is
+   public information published in the DNS.
 
-5.1.  Availability of zones without NS
-
-5.2.  Reflection Attacks
-
-5.3.  Parsing
-
-5.4.  Availability
+   While the records are transmitting public infomration, resolvers
+   which are making use of records may be attemping to keep the
+   information they are querying private from on-path observers.
+   Privacy consious resolvers should query for this record at the apex
+   of a zone when delegated from the parent to help establish an
+   encrypted channel to the authority.
 
 
 
@@ -674,7 +674,19 @@ April                    Expires 14 January 2021               [Page 12]
 Internet-Draft                     NS2                         July 2020
 
 
-5.5.  Connetion Failures
+6.  Security Considerations
+
+   TODO: Fill this section out
+
+6.1.  Availability of zones without NS
+
+6.2.  Reflection Attacks
+
+6.3.  Parsing
+
+6.4.  Availability
+
+6.5.  Connetion Failures
 
    When a resolver attempts to access nameserver delegated by a NS2 or
    NST2 record, if a connection error occurs, such as a certificate
@@ -691,9 +703,9 @@ Internet-Draft                     NS2                         July 2020
    opportunisitic privacy resolvers may wish to attempt resolution using
    any NS records that may be present.
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  New registry for NS2 transports
+7.1.  New registry for NS2 transports
 
    The "NS2/NS2T Transport Parameter Registry" defines the namespace for
    parameters, including string representations and numeric values.
@@ -702,25 +714,13 @@ Internet-Draft                     NS2                         July 2020
 
    ACTION: create and include a reference to this registry.
 
-6.1.1.  Procedure
+7.1.1.  Procedure
 
    A registration MUST include the following fields:
 
    *  Name: The transport type key name
 
    *  TransportKey: A numeric identifier (range 0-65535)
-
-   *  Meaning: a short description
-
-   *  Protocol Specification
-
-   *  Pointer to specification text
-
-6.1.2.  Initial Contents
-
-   The "NS2/NS2T Transport Parameter Registry" shall initially be
-   populated with the registrations below:
-
 
 
 
@@ -729,6 +729,17 @@ April                    Expires 14 January 2021               [Page 13]
 
 Internet-Draft                     NS2                         July 2020
 
+
+   *  Meaning: a short description
+
+   *  Protocol Specification
+
+   *  Pointer to specification text
+
+7.1.2.  Initial Contents
+
+   The "NS2/NS2T Transport Parameter Registry" shall initially be
+   populated with the registrations below:
 
    +==============+========+================+===============+==========+
    | TransportKey | Name   | Meaning        | Protocol      |Reference |
@@ -760,10 +771,20 @@ Internet-Draft                     NS2                         July 2020
 
                                   Table 1
 
-6.2.  New SvcParamKey Values
+7.2.  New SvcParamKey Values
 
    This document defines new SvcParamKey values in the "Service Binding
    (SVCB) Parameter Registry".
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 14]
+
+Internet-Draft                     NS2                         July 2020
+
 
      +=============+====================+=========+=================+
      | SvcParamKey | NAME               | Meaning | Reference       |
@@ -779,14 +800,7 @@ Internet-Draft                     NS2                         July 2020
 
                                  Table 2
 
-
-
-April                    Expires 14 January 2021               [Page 14]
-
-Internet-Draft                     NS2                         July 2020
-
-
-7.  Informative References
+8.  Informative References
 
    [DOQ-I-D]  Huitema, C., Shore, M., Mankin, A., Dickinson, S., and J.
               Iyengar, "Specification of DNS over Dedicated QUIC
@@ -820,6 +834,14 @@ Internet-Draft                     NS2                         July 2020
               Schwartz, B., Bishop, M., and E. Nygren, "Service binding
               and parameter specification via the DNS (DNS SVCB and
               HTTPSSVC)", Work in Progress, Internet-Draft, draft-ietf-
+
+
+
+April                    Expires 14 January 2021               [Page 15]
+
+Internet-Draft                     NS2                         July 2020
+
+
               dnsop-svcb-httpssvc-00, 31 October 2019,
               <http://www.ietf.org/internet-drafts/draft-ietf-dnsop-
               svcb-httpssvc-00.txt>.
@@ -831,16 +853,6 @@ Internet-Draft                     NS2                         July 2020
    [RFC1035]  Mockapetris, P.V., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
-
-
-
-
-
-
-April                    Expires 14 January 2021               [Page 15]
-
-Internet-Draft                     NS2                         July 2020
-
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -879,6 +891,13 @@ Appendix B.  TODO
    *  Discussion about TTLs and what they should be and how that might
       impact performance
 
+
+
+April                    Expires 14 January 2021               [Page 16]
+
+Internet-Draft                     NS2                         July 2020
+
+
    *  Discuss the cacheability of the Alias form records.
 
    *  Remove all "DRAFT NOTES:" in the document.
@@ -890,13 +909,6 @@ Appendix B.  TODO
    *  add out-of-bailiwick requirement for AliasForm
 
    *  worked out resolution example including alias form delegation
-
-
-
-April                    Expires 14 January 2021               [Page 16]
-
-Internet-Draft                     NS2                         July 2020
-
 
    *  DoH URI teamplte does not include post
 
@@ -935,6 +947,13 @@ Appendix C.  Change Log
 
    *  Add an example early in the draft.  Introduction area
 
+
+
+April                    Expires 14 January 2021               [Page 17]
+
+Internet-Draft                     NS2                         July 2020
+
+
    *  Add section about port numbers discussion
 
    *  collapse udp and tcp to the do53
@@ -946,14 +965,6 @@ Appendix C.  Change Log
    *  Removed DS and DNSKEY SvcParamFields.  Avoids issues with DNSSEC
       signing in the parent.
 
-
-
-
-April                    Expires 14 January 2021               [Page 17]
-
-Internet-Draft                     NS2                         July 2020
-
-
    *  Removed IPv{4,6}Hints SvcParamFields.  There was a discussion on
       DNSOP about how glue is required
 
@@ -962,6 +973,8 @@ Internet-Draft                     NS2                         July 2020
 
    *  Attempting to clean up the introduction, goals and motivations of
       the document
+
+   *  Adding a privact considerations section
 
 Appendix D.  Discussions
 
@@ -988,6 +1001,15 @@ D.2.  Second Record Name
 
 Author's Address
 
+
+
+
+
+April                    Expires 14 January 2021               [Page 18]
+
+Internet-Draft                     NS2                         July 2020
+
+
    Tim April
    Akamai Technologies
 
@@ -1005,4 +1027,38 @@ Author's Address
 
 
 
-April                    Expires 14 January 2021               [Page 18]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 19]
