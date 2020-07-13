@@ -695,8 +695,8 @@ Internet-Draft                     NS2                         July 2020
 
    Like with NS records, the NS2 records in the child zone SHOULD be
    signed when the zone is DNSSEC signed.  The NS2 records that appear
-   in the parent zone would not be signed, as is the case with NS
-   records.
+   in the parent zone are glue and would not be signed, as is the case
+   with NS records.
 
    NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.
 
@@ -1028,6 +1028,9 @@ Internet-Draft                     NS2                         July 2020
 
    *  Prohibiting NS2 and NS2T from existing at the same name
 
+   *  Making the statement about the parent records being glue and
+      should not be signed
+
 Appendix D.  Discussions
 
    Editor Note: Remove this full section before publication.
@@ -1055,9 +1058,6 @@ D.3.  Second Record Name
    Selected NS2T for Nameserver 2 Target since the record defines the
    target authoritative servers.
 
-   ~~~ 01234567890123456789012345678901234567890123456789012345678901234
-   567891
-
 
 
 
@@ -1066,15 +1066,15 @@ April                    Expires 14 January 2021               [Page 19]
 Internet-Draft                     NS2                         July 2020
 
 
+   ~~~ 01234567890123456789012345678901234567890123456789012345678901234
+   567891
+
 Author's Address
 
    Tim April
    Akamai Technologies
 
    Email: ietf@tapril.net
-
-
-
 
 
 

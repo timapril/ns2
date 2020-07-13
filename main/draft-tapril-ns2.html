@@ -1390,7 +1390,7 @@ example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
       <h2 id="name-dnssec-and-ns2">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-dnssec-and-ns2" class="section-name selfRef">DNSSEC and NS2</a>
       </h2>
-<p id="section-4-1">Like with NS records, the NS2 records in the child zone SHOULD be signed when the zone is DNSSEC signed. The NS2 records that appear in the parent zone would not be signed, as is the case with NS records.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Like with NS records, the NS2 records in the child zone SHOULD be signed when the zone is DNSSEC signed. The NS2 records that appear in the parent zone are glue and would not be signed, as is the case with NS records.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">NS2T records, SHOULD be signed in a zone which is signed by DNSSEC.<a href="#section-4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1759,6 +1759,8 @@ example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
         <li class="normal" id="section-appendix.c-5.7">Adding this note that CNS2 will not be included in this draft<a href="#section-appendix.c-5.7" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-appendix.c-5.8">Prohibiting NS2 and NS2T from existing at the same name<a href="#section-appendix.c-5.8" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-appendix.c-5.9">Making the statement about the parent records being glue and should not be signed<a href="#section-appendix.c-5.9" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
