@@ -1032,7 +1032,10 @@ address div.right {
                 <p id="section-toc.1-1.12.2.1.1"><a href="#section-d.1" class="xref">D.1</a>.  <a href="#name-port-numbers" class="xref">Port Numbers</a><a href="#section-toc.1-1.12.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="compact toc ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#section-d.2" class="xref">D.2</a>.  <a href="#name-second-record-name" class="xref">Second Record Name</a><a href="#section-toc.1-1.12.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-d.2" class="xref">D.2</a>.  <a href="#name-cns2" class="xref">CNS2</a><a href="#section-toc.1-1.12.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.12.2.3">
+                <p id="section-toc.1-1.12.2.3.1"><a href="#section-d.3" class="xref">D.3</a>.  <a href="#name-second-record-name" class="xref">Second Record Name</a><a href="#section-toc.1-1.12.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -1747,7 +1750,11 @@ example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
 </li>
         <li class="normal" id="section-appendix.c-5.4">Attempting to clean up the introduction, goals and motivations of the document<a href="#section-appendix.c-5.4" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-appendix.c-5.5">Adding a privact considerations section<a href="#section-appendix.c-5.5" class="pilcrow">¶</a>
+        <li class="normal" id="section-appendix.c-5.5">Adding a privacy considerations section<a href="#section-appendix.c-5.5" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-appendix.c-5.6">Adding more clairty around when to include/expect the NS2/NS2T records<a href="#section-appendix.c-5.6" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-appendix.c-5.7">Adding this note that CNS2 will not be included in this draft<a href="#section-appendix.c-5.7" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
@@ -1766,14 +1773,22 @@ example.com.  86400  IN NS2    3 ns.example.net. ( transports=doh,
 <p id="section-d.1-1">Originally, I had added SvcParamKeys for port numbers for each of the protocols. There was a discussion that resulted in removing the port numbers, since it was added complexity that had little perceived use in the wild. These can be added back if there is a desire to have them. The original author included them as a way to provide the nameserver operator a way to differentiate incoming traffic when using the aliasform with lower TTLs and intelligent responses based on the client IP.<a href="#section-d.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="second-record-name">
+<div id="cns2">
 <section id="section-d.2">
-        <h2 id="name-second-record-name">
-<a href="#section-d.2" class="section-number selfRef">D.2. </a><a href="#name-second-record-name" class="section-name selfRef">Second Record Name</a>
+        <h2 id="name-cns2">
+<a href="#section-d.2" class="section-number selfRef">D.2. </a><a href="#name-cns2" class="section-name selfRef">CNS2</a>
         </h2>
-<p id="section-d.2-1">Selected NS2T for Nameserver 2 Target since the record defines the target authoritative servers.<a href="#section-d.2-1" class="pilcrow">¶</a></p>
-<p id="section-d.2-2">~~~
-01234567890123456789012345678901234567890123456789012345678901234567891<a href="#section-d.2-2" class="pilcrow">¶</a></p>
+<p id="section-d.2-1">Client NS2, similar to CDS might be a way to provide support for getting NS2 records into the parent zone before going through the registrars, but that might be a tough thing to agree on at this point.<a href="#section-d.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="second-record-name">
+<section id="section-d.3">
+        <h2 id="name-second-record-name">
+<a href="#section-d.3" class="section-number selfRef">D.3. </a><a href="#name-second-record-name" class="section-name selfRef">Second Record Name</a>
+        </h2>
+<p id="section-d.3-1">Selected NS2T for Nameserver 2 Target since the record defines the target authoritative servers.<a href="#section-d.3-1" class="pilcrow">¶</a></p>
+<p id="section-d.3-2">~~~
+01234567890123456789012345678901234567890123456789012345678901234567891<a href="#section-d.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
