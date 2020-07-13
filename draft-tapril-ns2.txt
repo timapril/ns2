@@ -76,11 +76,11 @@ Table of Contents
    2.  NS2 and NS2T Record Types . . . . . . . . . . . . . . . . . .   5
      2.1.  Difference between the records  . . . . . . . . . . . . .   5
      2.2.  AliasForm Record Type . . . . . . . . . . . . . . . . . .   6
-       2.2.1.  Multiple Service Providers  . . . . . . . . . . . . .   7
+       2.2.1.  Multiple Service Providers  . . . . . . . . . . . . .   6
        2.2.2.  Loop Prevention . . . . . . . . . . . . . . . . . . .   7
      2.3.  ServiceForm Record Type . . . . . . . . . . . . . . . . .   7
        2.3.1.  SvcFieldPriority  . . . . . . . . . . . . . . . . . .   7
-       2.3.2.  SvcDomainName . . . . . . . . . . . . . . . . . . . .   8
+       2.3.2.  SvcDomainName . . . . . . . . . . . . . . . . . . . .   7
        2.3.3.  SvcParamKeys  . . . . . . . . . . . . . . . . . . . .   8
      2.4.  Deployment Considerations . . . . . . . . . . . . . . . .  10
        2.4.1.  AliasForm and ServiceForm in the Parent . . . . . . .  10
@@ -294,12 +294,7 @@ Internet-Draft                     NS2                         July 2020
    name.
 
    Since the NS2 record is indicative of a zone cut while NS2T is not,
-   names MUST NOT have but NS2 and NS2T records at the same time.  If
-   both records exist for the same name, the resolution should return
-   SERVFAIL.
-
-   DRAFT NOTE: Should this be a different error code?  Should this drop
-   the NS2T and just return NS2?
+   names MUST NOT have but NS2 and NS2T records at the same time.
 
 2.2.  AliasForm Record Type
 
@@ -323,21 +318,6 @@ Internet-Draft                     NS2                         July 2020
    resolver should resolve the RR type NS2T for the name
    customer1.example.net.
 
-
-
-
-
-
-
-
-
-
-
-April                    Expires 14 January 2021                [Page 6]
-
-Internet-Draft                     NS2                         July 2020
-
-
 2.2.1.  Multiple Service Providers
 
    Some zone owners may wish to use multiple providers to serve their
@@ -349,6 +329,14 @@ Internet-Draft                     NS2                         July 2020
 
    example.com.    86400    IN  NS2     0   customer1.example.net.
    example.com.    86400    IN  NS2     0   customer1.example.org.
+
+
+
+
+April                    Expires 14 January 2021                [Page 6]
+
+Internet-Draft                     NS2                         July 2020
+
 
    DRAFT NOTE: SVCB says that there "SHOULD only have a single RR".
    This ignores that but keep the randomization part.  Section 2.5p1 of
@@ -383,17 +371,6 @@ Internet-Draft                     NS2                         July 2020
    SHOULD be used to dictate the priority when multiple NS2 or NS2T
    records are returned.
 
-
-
-
-
-
-
-April                    Expires 14 January 2021                [Page 7]
-
-Internet-Draft                     NS2                         July 2020
-
-
 2.3.2.  SvcDomainName
 
    As defined in the SVCB document
@@ -407,6 +384,15 @@ Internet-Draft                     NS2                         July 2020
 
    DRAFT NOTE: Should u-label and a-label be expanded?  I'm leaning
    towards not expanding.
+
+
+
+
+
+April                    Expires 14 January 2021                [Page 7]
+
+Internet-Draft                     NS2                         July 2020
+
 
 2.3.3.  SvcParamKeys
 
@@ -443,13 +429,6 @@ Internet-Draft                     NS2                         July 2020
       over DNS over Dedicated QUIC Connections
       [I-D.draft-huitema-quic-dnsoquic-07]
 
-
-
-April                    Expires 14 January 2021                [Page 8]
-
-Internet-Draft                     NS2                         July 2020
-
-
    The order of the keys in the list dictate the order which the
    nameserver SHOULD be contacted in.  The client SHOULD compare the
    order of available transports with the set of transports it supports
@@ -460,6 +439,16 @@ Internet-Draft                     NS2                         July 2020
    the SvcParamValue is a string of 16-bit integers representing the
    TransportKey values as described in the "NS2/NS2T Transport Parameter
    Registry".
+
+
+
+
+
+
+April                    Expires 14 January 2021                [Page 8]
+
+Internet-Draft                     NS2                         July 2020
+
 
 2.3.3.2.  "dnsDotEarlyData"
 
@@ -498,6 +487,17 @@ Internet-Draft                     NS2                         July 2020
    example.com.  86400 IN NS2 3 ns.example.net. ( transports=doh,
    dnsDohURITemplate="https://doh.example.org/q/{?dns}" )
 
+   The presentation format of the SvcParamValue is a quoted string.  The
+   wire form of the SvcParamValue is an octet string of the URI template
+   as defined in [RFC8484].
+
+
+
+
+
+
+
+
 
 
 
@@ -505,10 +505,6 @@ April                    Expires 14 January 2021                [Page 9]
 
 Internet-Draft                     NS2                         July 2020
 
-
-   The presentation format of the SvcParamValue is a quoted string.  The
-   wire form of the SvcParamValue is an octet string of the URI template
-   as defined in [RFC8484].
 
 2.3.3.4.  "esniconfig"
 
@@ -552,6 +548,10 @@ Internet-Draft                     NS2                         July 2020
    the opinion that it should stay as it is for reliability reasons.  If
    it is decided that this should contradict SVCB, maybe we should try
    to change SVCB.
+
+
+
+
 
 
 
