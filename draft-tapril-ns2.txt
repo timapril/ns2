@@ -91,21 +91,21 @@ Table of Contents
    3.  Responses with NS2  . . . . . . . . . . . . . . . . . . . . .  11
      3.1.  Response Size Considerations  . . . . . . . . . . . . . .  12
      3.2.  When to include glue  . . . . . . . . . . . . . . . . . .  12
-   4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  12
-   5.  Privact Considerations  . . . . . . . . . . . . . . . . . . .  12
+   4.  DNSSEC and NS2  . . . . . . . . . . . . . . . . . . . . . . .  13
+   5.  Privact Considerations  . . . . . . . . . . . . . . . . . . .  13
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
      6.1.  Availability of zones without NS  . . . . . . . . . . . .  13
      6.2.  Reflection Attacks  . . . . . . . . . . . . . . . . . . .  13
      6.3.  Parsing . . . . . . . . . . . . . . . . . . . . . . . . .  13
      6.4.  Availability  . . . . . . . . . . . . . . . . . . . . . .  13
      6.5.  Connetion Failures  . . . . . . . . . . . . . . . . . . .  13
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-     7.1.  New registry for NS2 transports . . . . . . . . . . . . .  13
-       7.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  13
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+     7.1.  New registry for NS2 transports . . . . . . . . . . . . .  14
+       7.1.1.  Procedure . . . . . . . . . . . . . . . . . . . . . .  14
        7.1.2.  Initial Contents  . . . . . . . . . . . . . . . . . .  14
-     7.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  14
-   8.  Informative References  . . . . . . . . . . . . . . . . . . .  15
-   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  16
+     7.2.  New SvcParamKey Values  . . . . . . . . . . . . . . . . .  15
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .  16
+   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  17
 
 
 
@@ -114,12 +114,12 @@ April                    Expires 14 January 2021                [Page 2]
 Internet-Draft                     NS2                         July 2020
 
 
-   Appendix B.  TODO . . . . . . . . . . . . . . . . . . . . . . . .  16
-   Appendix C.  Change Log . . . . . . . . . . . . . . . . . . . . .  17
-   Appendix D.  Discussions  . . . . . . . . . . . . . . . . . . . .  18
-     D.1.  Port Numbers  . . . . . . . . . . . . . . . . . . . . . .  18
-     D.2.  Second Record Name  . . . . . . . . . . . . . . . . . . .  18
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  18
+   Appendix B.  TODO . . . . . . . . . . . . . . . . . . . . . . . .  17
+   Appendix C.  Change Log . . . . . . . . . . . . . . . . . . . . .  18
+   Appendix D.  Discussions  . . . . . . . . . . . . . . . . . . . .  19
+     D.1.  Port Numbers  . . . . . . . . . . . . . . . . . . . . . .  19
+     D.2.  Second Record Name  . . . . . . . . . . . . . . . . . . .  19
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
 
@@ -604,12 +604,12 @@ Internet-Draft                     NS2                         July 2020
 
 3.  Responses with NS2
 
-   NS2 and NS2T are intended to supersede the NS record.  When an
-   authoritative nameserver receives a query for a name that it intendes
-   to refer to another server, the nameserver SHOULD be provided NS2
-   records in addition to NS records in the delegation.
+   The NS2 and NS2T records are intended to supersede the NS record.  As
+   such, the NS2 records should be included in the response in the
+   following situations, assuming the records exist in the servers zone:
 
-
+   1) If the qtype is for NS2 or NS2T, the server should respond with
+   NS2 or NS2T respectively in the authority section of the response.
 
 
 
@@ -617,6 +617,28 @@ April                    Expires 14 January 2021               [Page 11]
 
 Internet-Draft                     NS2                         July 2020
 
+
+   2) For queries over unencrypted TCP port 53, any of the NS2 and NS2T
+   records SHOULD be included in the additional section of the response.
+
+   3) For queries over unencrypted UDP port 53, any of the NS2 and NS2T
+   records SHOULD be included in the additional section of the response
+   unless doing so would result in a truncated response.  For responses
+   that would require truncation, the resolver operator and/or
+   implementor may decide to truncate the response or exclude the
+   records from the response.
+
+   4) If encrypted transports are supported on the authority, the any
+   NS2 and NS2T records should be included in the authority section of
+   the respose.
+
+   DRAFT NOTE: It is unknown how resolvers will handle multiple
+   authoritative RRTypes in the authority section of the response,
+   leaving 2 and 3 as the additional section until either testing is
+   done or a consensus is determined in DNSOP/DPRIVE.
+
+   DRAFT NOTE: Suggesting authority for encrypted transport since it
+   would more closely align with the NS record.
 
 3.1.  Response Size Considerations
 
@@ -645,6 +667,13 @@ Internet-Draft                     NS2                         July 2020
    opprotunisitic upgrade of the connection to use non-Do53 for the
    initial setup.
 
+
+
+April                    Expires 14 January 2021               [Page 12]
+
+Internet-Draft                     NS2                         July 2020
+
+
 4.  DNSSEC and NS2
 
    Like with NS records, the NS2 records in the child zone SHOULD be
@@ -666,14 +695,6 @@ Internet-Draft                     NS2                         July 2020
    of a zone when delegated from the parent to help establish an
    encrypted channel to the authority.
 
-
-
-
-April                    Expires 14 January 2021               [Page 12]
-
-Internet-Draft                     NS2                         July 2020
-
-
 6.  Security Considerations
 
    TODO: Fill this section out
@@ -694,6 +715,20 @@ Internet-Draft                     NS2                         July 2020
    connect to the other nameservers delegated to until either exhausting
    the list or the resolver's policy indicates that they should treat
    the resoltion as failed.
+
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 13]
+
+Internet-Draft                     NS2                         July 2020
+
 
    The failure action when failing to resolve a name with NS2/NS2T due
    to connection erros is dependant on the resolver operators policies.
@@ -722,14 +757,6 @@ Internet-Draft                     NS2                         July 2020
 
    *  TransportKey: A numeric identifier (range 0-65535)
 
-
-
-
-April                    Expires 14 January 2021               [Page 13]
-
-Internet-Draft                     NS2                         July 2020
-
-
    *  Meaning: a short description
 
    *  Protocol Specification
@@ -740,6 +767,24 @@ Internet-Draft                     NS2                         July 2020
 
    The "NS2/NS2T Transport Parameter Registry" shall initially be
    populated with the registrations below:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 14]
+
+Internet-Draft                     NS2                         July 2020
+
 
    +==============+========+================+===============+==========+
    | TransportKey | Name   | Meaning        | Protocol      |Reference |
@@ -776,16 +821,6 @@ Internet-Draft                     NS2                         July 2020
    This document defines new SvcParamKey values in the "Service Binding
    (SVCB) Parameter Registry".
 
-
-
-
-
-
-April                    Expires 14 January 2021               [Page 14]
-
-Internet-Draft                     NS2                         July 2020
-
-
      +=============+====================+=========+=================+
      | SvcParamKey | NAME               | Meaning | Reference       |
      +=============+====================+=========+=================+
@@ -799,6 +834,13 @@ Internet-Draft                     NS2                         July 2020
      +-------------+--------------------+---------+-----------------+
 
                                  Table 2
+
+
+
+April                    Expires 14 January 2021               [Page 15]
+
+Internet-Draft                     NS2                         July 2020
+
 
 8.  Informative References
 
@@ -834,14 +876,6 @@ Internet-Draft                     NS2                         July 2020
               Schwartz, B., Bishop, M., and E. Nygren, "Service binding
               and parameter specification via the DNS (DNS SVCB and
               HTTPSSVC)", Work in Progress, Internet-Draft, draft-ietf-
-
-
-
-April                    Expires 14 January 2021               [Page 15]
-
-Internet-Draft                     NS2                         July 2020
-
-
               dnsop-svcb-httpssvc-00, 31 October 2019,
               <http://www.ietf.org/internet-drafts/draft-ietf-dnsop-
               svcb-httpssvc-00.txt>.
@@ -853,6 +887,16 @@ Internet-Draft                     NS2                         July 2020
    [RFC1035]  Mockapetris, P.V., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+
+
+
+
+
+April                    Expires 14 January 2021               [Page 16]
+
+Internet-Draft                     NS2                         July 2020
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -891,13 +935,6 @@ Appendix B.  TODO
    *  Discussion about TTLs and what they should be and how that might
       impact performance
 
-
-
-April                    Expires 14 January 2021               [Page 16]
-
-Internet-Draft                     NS2                         July 2020
-
-
    *  Discuss the cacheability of the Alias form records.
 
    *  Remove all "DRAFT NOTES:" in the document.
@@ -909,6 +946,13 @@ Internet-Draft                     NS2                         July 2020
    *  add out-of-bailiwick requirement for AliasForm
 
    *  worked out resolution example including alias form delegation
+
+
+
+April                    Expires 14 January 2021               [Page 17]
+
+Internet-Draft                     NS2                         July 2020
+
 
    *  DoH URI teamplte does not include post
 
@@ -947,13 +991,6 @@ Appendix C.  Change Log
 
    *  Add an example early in the draft.  Introduction area
 
-
-
-April                    Expires 14 January 2021               [Page 17]
-
-Internet-Draft                     NS2                         July 2020
-
-
    *  Add section about port numbers discussion
 
    *  collapse udp and tcp to the do53
@@ -964,6 +1001,14 @@ Internet-Draft                     NS2                         July 2020
 
    *  Removed DS and DNSKEY SvcParamFields.  Avoids issues with DNSSEC
       signing in the parent.
+
+
+
+
+April                    Expires 14 January 2021               [Page 18]
+
+Internet-Draft                     NS2                         July 2020
+
 
    *  Removed IPv{4,6}Hints SvcParamFields.  There was a discussion on
       DNSOP about how glue is required
@@ -1001,55 +1046,10 @@ D.2.  Second Record Name
 
 Author's Address
 
-
-
-
-
-April                    Expires 14 January 2021               [Page 18]
-
-Internet-Draft                     NS2                         July 2020
-
-
    Tim April
    Akamai Technologies
 
    Email: ietf@tapril.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
