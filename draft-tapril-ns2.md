@@ -106,9 +106,7 @@ It should be noted that both NS2 and NS2T records may exist for the same label. 
 
 In the above case, the NS2 record for c1.example.org would only be used when trying to resolve names below c1.example.org. This reason is why when an AliasForm NS2 or NS2T record is encountered, the resolver MUST query for the NS2T record associated with the given name.
 
-Since the NS2 record is indicative of a zone cut while NS2T is not, names MUST NOT have but NS2 and NS2T records at the same time. If both records exist for the same name, the resolution should return SERVFAIL.
-
-DRAFT NOTE: Should this be a different error code? Should this drop the NS2T and just return NS2?
+Since the NS2 record is indicative of a zone cut while NS2T is not, names MUST NOT have but NS2 and NS2T records at the same time.
 
 ## AliasForm Record Type
 
